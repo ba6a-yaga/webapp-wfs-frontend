@@ -80,7 +80,8 @@ footer {
   width: calc(100% - 260px);
   left: 0;
   position: relative;
-  float: right;
+  margin: 0 auto;
+  max-width: 1024px;
   background-color: #f5f5fa; }
 
 #wrapper #sidebar-nav,
@@ -99,10 +100,15 @@ footer {
   width: 100%; }
 
 .layout-fullwidth #wrapper .navbar {
+  max-width: 975px;
+  margin: 0 auto;
   left: 0 !important; }
 
 .layout-fullwidth #wrapper .btn-toggle-fullwidth {
   color: #00AAFF; }
+
+
+
 
 .offcanvas-active #wrapper .sidebar {
   left: 0; }
@@ -238,8 +244,15 @@ html.fullscreen-bg #wrapper {
     top: 22px;
     right: 16px; }
 
+    
+.navbar-nav > li > span {
+  display: inline-block;
+  padding: 29px 22px;
+} 
+
 .navbar-nav > li > a {
-  padding: 28px 20px; }
+  padding: 28px 20px; text-decoration: underline }
+
   .navbar-nav > li > a > i {
     font-size: 22px;
     margin-right: 2px;
@@ -1764,3 +1777,11 @@ ul.activity-timeline > li {
     border: 1px solid #CCC; }
 
 /*# sourceMappingURL=main.css.map */
+
+
+
+.navbar .balance {
+  font-size: 24pt;
+  float: left;
+  margin-top: 18px;
+}
