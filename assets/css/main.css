@@ -993,7 +993,7 @@ ul.activity-list > li {
   border-radius: 5px;
   width: 20%;
   padding: 0 20px 0 20px;
-  height: 450px;
+  height: 500px;
   margin: 0 auto;
   background-color: #fff; }
   .auth-box:before {
@@ -1785,3 +1785,8 @@ ul.activity-timeline > li {
   float: left;
   margin-top: 18px;
 }
+
+.ajaxloader {background: url("../../assets/img/ajaxloader.gif") 50% 50% no-repeat;}
+.d-none {display: none}
+.d-block {display: block}
+.d-iblick {display: inline-block}
