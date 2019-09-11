@@ -93,6 +93,143 @@
 		</div>
 	</div>	
 </script>
+<script id="sendCoin" type="text/x-jsrender">
+	<!-- RECENT PURCHASES -->
+	<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title">Отправить монеты</h3>
+			</div>
+			<div class="panel-body">
+				<div class="input-group">
+					<span class="input-group-addon">WFS</span>
+					<input class="form-control" type="text">
+					<span class="input-group-addon">.00</span>
+				</div>
+				<br>
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fa fa-user"></i></span>
+					<input class="form-control" placeholder="Номер телефона" type="phone">
+				</div>
+				
+
+
+			</div>
+			<div class="panel-footer">
+				<div class="row">
+					<div class="col-md-6"><span class="panel-note"></span></div>
+					<div class="col-md-6 text-right"><a href="#" class="btn btn-primary">Отправить</a></div>
+				</div>
+			</div>
+		</div>
+	<!-- END RECENT PURCHASES -->
+</script>
+
+<script id="buyCoin" type="text/x-jsrender">
+	<div class="panel">
+		<div class="panel-heading">
+			<h3 class="panel-title">Купить монеты</h3>
+
+		</div>
+		<div class="panel-body">
+			
+			<div class="input-group">
+				<span class="input-group-addon">WFS</span>
+				<input class="form-control" type="text">
+				<span class="input-group-addon">.00</span>
+			</div>
+			<br>
+			<div class="input-group">
+				<span class="input-group-addon">В рублях</span>
+				<input class="form-control" type="text">
+				<span class="input-group-addon">.00</span>
+			</div>	
+
+		</div>
+		<div class="panel-footer">
+			<div class="row">
+				<div class="col-md-6"><span class=" text-success">Ваша скидка составляет 10%</span></div>
+				<div class="col-md-6 text-right"><a href="#" class="btn btn-success">Купить</a></div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="transactionItems" type="text/x-jsrender">
+{{for ~getUser().transactions }}
+<tr>
+	<td>{{:accountTo}}</td>
+	<td>{{:amount}} WFS</td>
+	<td>{{:~formatDate(updatedAt)}}</td>
+	<td>
+		{{if result.status == 'success'}}
+			<span class="label label-success">Выполнено</span>
+		{{else result.status == 'process' }}
+			<span class="label label-primary">В процессе</span>
+		{{else result.status == 'new'}}
+			<span class="label label-info">Новая</span>
+		{{else result.status == 'reject'}}
+			<span class="label label-danger">Отклонено</span>
+		{{/if}}
+	</td>
+
+</tr>
+{{/for}}
+</script>
+<script id="transactionList" type="text/x-jsrender">
+	<div class="panel-heading">
+		<h3 class="panel-title">Мои транзакции</h3>
+	</div>
+	<div class="panel-body no-padding">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Кому</th>
+					<th>Сколько</th>
+					<th>Дата &amp; Время</th>
+					<th>Статус</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{include tmpl="#transactionItems"/}}
+			</tbody>
+		</table>
+	</div>
+</script>
+<script id="userListItem" type="text/x-jsrender">
+	<tr>
+		<td>9312455764</td>
+		<td>Олег</td>
+		<td>200 WFS</td>
+		<td><button type="button" class="btn btn-primary btn-sm">Удалить</button></td>
+	</tr>
+</script>
+<script id="userList" type="text/x-jsrender">
+	<div class="col-md-12">
+		<!-- RECENT PURCHASES -->
+		<div class="panel">
+			<div class="panel-body no-padding">
+				<div class="input-group" style="width:50%; margin:20px">
+					<input class="form-control" type="text" placeholder="Введите имя или номер пользователя">
+					<span class="input-group-btn"><button class="btn btn-primary" type="button">Найти</button></span>
+				</div>	
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Телефон</th>
+							<th>Имя</th>
+							<th>Баланс</th>
+							<th>Действие</th>
+						</tr>
+					</thead>
+					<tbody>
+							{{include tmpl="#userListItem"/}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- END RECENT PURCHASES -->
+	</div>
+</script>
 
 <script id="dashboard" type="text/x-jsrender">
 	<!-- NAVBAR -->
@@ -103,7 +240,7 @@
 		</div>
 
 		<div class="balance">
-			<span class="text-primary">Баланс: <span class="text-success">3 000 000 WFS</span></span>
+			<span class="text-primary">Баланс: <span class="text-success">{{:~getUser().balance}} WFS</span></span>
 		</div>
 
 		<div class="container-fluid">
@@ -111,7 +248,7 @@
 			<div id="navbar-menu">
 				<ul class="nav navbar-nav navbar-right">
 					<li >
-						<span class="text-primary">Привет Михаил!</span>
+						<span class="text-primary">Привет {{:~getUser().name}}!</span>
 					</li>
 					<li><a href="#" data-action="logout" > <span>Выйти </span></a></li>
 				</ul>
@@ -128,65 +265,10 @@
 				<!-- OVERVIEW -->
 				<div class="row">
 						<div class="col-md-6">
-							<!-- RECENT PURCHASES -->
-							<div class="panel">
-									<div class="panel-heading">
-										<h3 class="panel-title">Отправить монеты</h3>
-									</div>
-									<div class="panel-body">
-										<div class="input-group">
-											<span class="input-group-addon">WFS</span>
-											<input class="form-control" type="text">
-											<span class="input-group-addon">.00</span>
-										</div>
-										<br>
-										<div class="input-group">
-											<span class="input-group-addon"><i class="fa fa-user"></i></span>
-											<input class="form-control" placeholder="Номер телефона" type="phone">
-										</div>
-										
-
-
-									</div>
-									<div class="panel-footer">
-										<div class="row">
-											<div class="col-md-6"><span class="panel-note"></span></div>
-											<div class="col-md-6 text-right"><a href="#" class="btn btn-primary">Отправить</a></div>
-										</div>
-									</div>
-								</div>
-							<!-- END RECENT PURCHASES -->
+							{{include tmpl="#sendCoin"/}}
 						</div>
 						<div class="col-md-6">
-							<!-- MULTI CHARTS -->
-							<div class="panel">
-								<div class="panel-heading">
-									<h3 class="panel-title">Купить монеты</h3>
-
-								</div>
-								<div class="panel-body">
-									
-									<div class="input-group">
-										<span class="input-group-addon">WFS</span>
-										<input class="form-control" type="text">
-										<span class="input-group-addon">.00</span>
-									</div>
-									<br>
-									<div class="input-group">
-										<span class="input-group-addon">В рублях</span>
-										<input class="form-control" type="text">
-										<span class="input-group-addon">.00</span>
-									</div>	
-
-								</div>
-								<div class="panel-footer">
-									<div class="row">
-										<div class="col-md-6"><span class=" text-success">Ваша скидка составляет 10%</span></div>
-										<div class="col-md-6 text-right"><a href="#" class="btn btn-success">Купить</a></div>
-									</div>
-								</div>
-							</div>
-							<!-- END MULTI CHARTS -->
+							{{include tmpl="#buyCoin"/}}
 						</div>
 					</div>
 				<!-- END OVERVIEW -->
@@ -194,119 +276,15 @@
 					<div class="col-md-12">
 						<!-- RECENT PURCHASES -->
 						<div class="panel">
-							<div class="panel-heading">
-								<h3 class="panel-title">Мои транзакции</h3>
-							</div>
-							<div class="panel-body no-padding">
-								<table class="table table-striped">
-									<thead>
-										<tr>
-											<th>Номер транзации</th>
-											<th>Кому</th>
-											<th>Сколько</th>
-											<th>Дата &amp; Время</th>
-											<th>Статус</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td><a href="#">763648</a></td>
-											<td>Олег (9312455764)</td>
-											<td>300 WFS</td>
-											<td>Сен 21, 2019</td>
-											<td><span class="label label-success">Выполнено</span></td>
-										</tr>
-										<tr>
-											<td><a href="#">763649</a></td>
-											<td>Виктор (9112357658)</td>
-											<td>62 WFS</td>
-											<td>Сен 21, 2019</td>
-											<td><span class="label label-warning">В ожидании</span></td>
-										</tr>
-										<tr>
-											<td><a href="#">763650</a></td>
-											<td>Михаил (9115588449)</td>
-											<td>20000 WFS</td>
-											<td>Сен 21, 2019</td>
-											<td><span class="label label-danger">Отклонено</span></td>
-										</tr>
-										<tr>
-											<td><a href="#">763651</a></td>
-											<td>Владимир (9655673456)</td>
-											<td>34567 WFS</td>
-											<td>Сен 21, 2019</td>
-											<td><span class="label label-success">Выполнено</span></td>
-										</tr>
-										<tr>
-											<td><a href="#">763652</a></td>
-											<td>Владимир (9655673456)</td>
-											<td>362 WFS</td>
-											<td>Сен 21, 2019</td>
-											<td><span class="label label-success">Выполнено</span></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
+							{{include tmpl="#transactionList"/}}
 						</div>
 						<!-- END RECENT PURCHASES -->
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<!-- RECENT PURCHASES -->
-						<div class="panel">
-
-							<div class="panel-body no-padding">
-								<div class="input-group" style="width:50%; margin:20px">
-									<input class="form-control" type="text" placeholder="Введите имя или номер пользователя">
-									<span class="input-group-btn"><button class="btn btn-primary" type="button">Найти</button></span>
-								</div>	
-								<table class="table table-striped">
-									<thead>
-										<tr>
-											<th>Телефон</th>
-											<th>Имя</th>
-											<th>Баланс</th>
-											<th>Действие</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>9312455764</td>
-											<td>Олег</td>
-											<td>200 WFS</td>
-											<td><button type="button" class="btn btn-primary btn-sm">Удалить</button></td>
-										</tr>
-										<tr>
-											<td>9312455764</td>
-											<td>Олег</td>
-											<td>200 WFS</td>
-											<td><button type="button" class="btn btn-primary btn-sm">Удалить</button></td>
-										</tr>
-										<tr>
-											<td>9312455764</td>
-											<td>Олег</td>
-											<td>200 WFS</td>
-											<td><button type="button" class="btn btn-primary btn-sm">Удалить</button></td>
-										</tr>
-										<tr>
-											<td>9312455764</td>
-											<td>Олег</td>
-											<td>200 WFS</td>
-											<td><button type="button" class="btn btn-primary btn-sm">Удалить</button></td>
-										</tr>
-										<tr>
-											<td>9312455764</td>
-											<td>Олег</td>
-											<td>200 WFS</td>
-											<td><button type="button" class="btn btn-primary btn-sm">Удалить</button></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<!-- END RECENT PURCHASES -->
-					</div>
+				<div class="row" id="userList">
+					{{if ~getUser().role == 'masterContract'}}
+						{{include tmpl="#userList"/}}
+					{{/if}}
 				</div>
 			</div>
 		</div>

@@ -9,10 +9,11 @@ $(document).ready(function() {
         dashboard: $.templates("#dashboard")
     }
 
-    getAjaxData('/users/current',{},function(data){
-        if( data == 'Unauthorized'){
+    getAjaxData('/users/current',{},function(response){
+        if( response == 'Unauthorized'){
             $('#wrapper').html(tmpl.login.render())
         }else{
+            window.UserData = response.user;
             $('#wrapper').html(tmpl.dashboard.render())            
         }
 
@@ -47,6 +48,7 @@ $(document).ready(function() {
 
         var login = function(response){
             if( response.status == 'success' ){
+                window.UserData = response.user;
                 Cookies.set('Auth', response.user.token);
                 $('#wrapper').html(tmpl.dashboard.render())   
             }else{
@@ -56,8 +58,7 @@ $(document).ready(function() {
 
         var register = function(response){
             if( response.status == 'success' ){
-                Cookies.set('Auth', response.user.token);
-                $('#wrapper').html(tmpl.dashboard.render())   
+                $('#wrapper').html(tmpl.login.render())   
             }else{
                 form.find('.alert-danger').text(response.textErr).show()
             }            
@@ -83,6 +84,16 @@ $(document).ready(function() {
     
 })
 
+
+function getUser(){
+    return window.UserData;
+}
+
+function formatDate(dateString){
+    var date = new Date(dateString);
+    return  date.getDate() + "-" + date.getMonth() + "-"+date.getFullYear()+" " + date.getHours() + ":" + date.getMinutes();
+}
+$.views.helpers({getUser:getUser,formatDate:formatDate });
 
 function getFormData(form){
     var data = {};
