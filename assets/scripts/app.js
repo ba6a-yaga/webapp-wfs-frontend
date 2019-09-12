@@ -3,10 +3,11 @@ var urlApi = 'http://localhost:8090/api';
 $(document).ready(function() {
     init_logs( true );
 
-    var tmpl = {
+    tmpl = {
         login: $.templates("#login"),
         register: $.templates("#register"),
-        dashboard: $.templates("#dashboard")
+        dashboard: $.templates("#dashboard"),
+        userListItem: $.templates("#userListItem")
     }
 
     getAjaxData('/users/current',{},function(response){
@@ -39,6 +40,30 @@ $(document).ready(function() {
         e.preventDefault();
         $('#wrapper').html(tmpl.login.render())
     })        
+
+
+    $('body').on('submit', 'form[data-action="userSearch"]', function(e){
+        e.preventDefault();
+        var form = $(this);
+        var query = form.find('input').val();
+        form.find('button[type="submit"]').attr("disabled", true);
+
+        if(query.length){
+            action = '/users/search/'
+        }else{
+            action = '/users/list'
+        }
+
+        getAjaxData(action+query,{}, function(response){
+            if( response.status == 'success' ){
+                form.find('button[type="submit"]').attr("disabled", false);
+                window.UserData.listUsers = response.users;
+                updateUserList()
+            }
+         
+        },'GET',action)
+
+    })
 
     $('body').on('submit', 'form[data-form="true"]', function(e){
         e.preventDefault();
@@ -81,9 +106,28 @@ $(document).ready(function() {
 
         return false;
     })
+
+
+    $('body').on('click', '[data-rmuser]',function(e){
+        var userid = $(this).attr('data-rmuser');
+        var isDelete = confirm("Вы точно хотите удалить этого пользователя?");
+        
+        if( isDelete )
+            getAjaxData('/users/delete/'+userid,{}, function(response){
+                if(response.status == 'success'){
+                    $('body').find(".user-"+userid ).remove()
+                }else{
+                    alert(response.textErr)
+                }
+            },'DELETE','delete user')
+    })    
     
 })
 
+
+function updateUserList(){
+    $('.userListItem tbody').html(tmpl.userListItem.render())
+}
 
 function getUser(){
     return window.UserData;
@@ -93,7 +137,12 @@ function formatDate(dateString){
     var date = new Date(dateString);
     return  date.getDate() + "-" + date.getMonth() + "-"+date.getFullYear()+" " + date.getHours() + ":" + date.getMinutes();
 }
-$.views.helpers({getUser:getUser,formatDate:formatDate });
+
+function convertBalance(balance){
+    return Number(balance).toLocaleString('ru-RU')
+}
+
+$.views.helpers({getUser:getUser,formatDate:formatDate, convertBalance:convertBalance });
 
 function getFormData(form){
     var data = {};

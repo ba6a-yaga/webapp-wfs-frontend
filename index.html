@@ -196,21 +196,25 @@
 	</div>
 </script>
 <script id="userListItem" type="text/x-jsrender">
-	<tr>
-		<td>9312455764</td>
-		<td>Олег</td>
-		<td>200 WFS</td>
-		<td><button type="button" class="btn btn-primary btn-sm">Удалить</button></td>
-	</tr>
+	{{for ~getUser().listUsers}}
+		<tr class="user-{{:_id}}">
+			<td>{{:phone}}</td>
+			<td>{{:name}}</td>
+			<td>{{:~convertBalance(balance) }} WFS</td>
+			<td><button type="button" class="btn btn-primary btn-sm" data-rmuser="{{:_id}}">Удалить</button></td>
+		</tr>
+	{{/for}}
 </script>
 <script id="userList" type="text/x-jsrender">
 	<div class="col-md-12">
 		<!-- RECENT PURCHASES -->
 		<div class="panel">
-			<div class="panel-body no-padding">
+			<div class="panel-body no-padding userListItem">
 				<div class="input-group" style="width:50%; margin:20px">
-					<input class="form-control" type="text" placeholder="Введите имя или номер пользователя">
-					<span class="input-group-btn"><button class="btn btn-primary" type="button">Найти</button></span>
+					<form data-action="userSearch"  style="display: inherit;">
+					<input class="form-control" type="text" placeholder="Введите имя или номер пользователя" >
+					<span class="input-group-btn"><button class="btn btn-primary" type="submit">Найти</button></span>
+					</form>
 				</div>	
 				<table class="table table-striped">
 					<thead>
