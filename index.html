@@ -96,30 +96,41 @@
 <script id="sendCoin" type="text/x-jsrender">
 	<!-- RECENT PURCHASES -->
 	<div class="panel">
-			<div class="panel-heading">
-				<h3 class="panel-title">Отправить монеты</h3>
-			</div>
-			<div class="panel-body">
-				<div class="input-group">
-					<span class="input-group-addon">WFS</span>
-					<input class="form-control" type="text">
-					<span class="input-group-addon">.00</span>
+			<form action="/transactions/transfer" data-form="true">
+				<div class="panel-heading">
+					<h3 class="panel-title">Отправить монеты</h3>
 				</div>
-				<br>
-				<div class="input-group">
-					<span class="input-group-addon"><i class="fa fa-user"></i></span>
-					<input class="form-control" placeholder="Номер телефона" type="phone">
+				<div class="panel-body">
+						<div class="alert alert-success alert-dismissible d-none" role="alert">
+								<i class="fa fa-check-circle"></i> Монеты отправлены!
+						</div>
+						<div class="alert alert-danger alert-dismissible d-none" role="alert"></div>
+						<div class="input-group">
+							<span class="input-group-addon">WFS</span>
+							<input class="form-control" type="text" name="amount">
+							<span class="input-group-addon">.00</span>
+						</div>
+						<br>
+						<div class="input-group">
+							<span class="input-group-addon"><i class="fa fa-user"></i></span>
+							<input class="form-control" placeholder="Номер телефона" type="phone" name="phone">
+						</div>
+					
+					
 				</div>
-				
-
-
-			</div>
-			<div class="panel-footer">
-				<div class="row">
-					<div class="col-md-6"><span class="panel-note"></span></div>
-					<div class="col-md-6 text-right"><a href="#" class="btn btn-primary">Отправить</a></div>
+				<div class="panel-footer">
+					<div class="row">
+						<div class="col-md-6"><span class="panel-note"></span></div>
+						<div class="col-md-6 text-right">
+								<button type="submit" class="btn btn-primary ">
+										<i class="fa fa-spinner fa-spin d-none"></i>
+										Отправить
+									</button>
+							
+						</div>
+					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 	<!-- END RECENT PURCHASES -->
 </script>
@@ -155,31 +166,39 @@
 </script>
 
 <script id="transactionItems" type="text/x-jsrender">
-{{for ~getUser().transactions }}
-<tr>
-	<td>{{:accountTo}}</td>
-	<td>{{:amount}} WFS</td>
-	<td>{{:~formatDate(updatedAt)}}</td>
-	<td>
-		{{if result.status == 'success'}}
-			<span class="label label-success">Выполнено</span>
-		{{else result.status == 'process' }}
-			<span class="label label-primary">В процессе</span>
-		{{else result.status == 'new'}}
-			<span class="label label-info">Новая</span>
-		{{else result.status == 'reject'}}
-			<span class="label label-danger">Отклонено</span>
-		{{/if}}
-	</td>
+{{if ~getUser().transactions.length }}	
+	{{for ~getUser().transactions }}
+	<tr>
+		<td>{{:accountTo}}</td>
+		<td>{{:amount}} WFS</td>
+		<td>{{:~formatDate(updatedAt)}}</td>
+		<td>
+			{{if status == 'complite'}}
+				<span class="label label-success">Выполнено</span>
+			{{else status == 'process' }}
+				<span class="label label-primary">В процессе</span>
+			{{else status == 'new'}}
+				<span class="label label-info">Новая</span>
+			{{else status == 'reject'}}
+				<span class="label label-danger">Отклонено</span>
+			{{/if}}
+		</td>
 
+	</tr>
+	{{/for}}
+{{else}}
+<tr>
+	<td>
+	Вы пока еще не совершили ни одной транзакции
+	</td>
 </tr>
-{{/for}}
+{{/if}}
 </script>
 <script id="transactionList" type="text/x-jsrender">
 	<div class="panel-heading">
 		<h3 class="panel-title">Мои транзакции</h3>
 	</div>
-	<div class="panel-body no-padding">
+	<div class="panel-body no-padding" id="transactions">
 		<table class="table table-striped">
 			<thead>
 				<tr>

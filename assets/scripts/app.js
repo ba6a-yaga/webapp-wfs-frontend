@@ -7,7 +7,8 @@ $(document).ready(function() {
         login: $.templates("#login"),
         register: $.templates("#register"),
         dashboard: $.templates("#dashboard"),
-        userListItem: $.templates("#userListItem")
+        userListItem: $.templates("#userListItem"),
+        transactions: $.templates('#transactionItems')
     }
 
     getAjaxData('/users/current',{},function(response){
@@ -71,6 +72,31 @@ $(document).ready(function() {
         var form = $(this);
         var data = getFormData(form)
 
+        console.log('form')
+
+        var transfer = function(response){
+            if( response.status == 'success' ){
+                getAjaxData('/transactions',{},function(res){
+                    UserData.transactions = res.transactions;
+                    var transactionsHtml = tmpl.transactions.render();
+                    $('body').find('#transactions tbody').html(transactionsHtml)
+                },'GET','load transactions')
+
+                form.find('.alert-success').show()
+                form.find('.alert-danger').hide()
+                setTimeout(function(){
+                    form.find('.alert-success').hide()
+                },5000)
+
+                form.find('input').each(function(el){
+                    logs($(this))
+                    $(this).val('')
+                })
+            }else{
+                form.find('.alert-danger').text(response.textErr).show()
+            }
+        }
+
         var login = function(response){
             if( response.status == 'success' ){
                 window.UserData = response.user;
@@ -99,6 +125,9 @@ $(document).ready(function() {
 
             if( form.attr('action') == '/users/login' )
                 login(response)
+
+            if( form.attr('action') == '/transactions/transfer' )
+                transfer(response)
             
             if( form.attr('action') == '/users' )
                 register(response)                
@@ -191,13 +220,11 @@ function getAjaxData( path, query, callback, type, stamp ){
                 logs(response);
             }
         },
-        success : function( data ){            
-            callback( data );	
-
+        success : function( data ){           
             if( isset( window.logs ) )
                 logs( '[++AjaxQuery-->' + stamp + '++]', { query : query, result : data } );
 
-
+            callback( data );
         },
 
         error : function ( XMLHttpRequest, textStatus, errorThrown ) {
