@@ -289,7 +289,12 @@ html.fullscreen-bg #wrapper {
   .navbar-nav.navbar-right {
     margin-right: 0; } }
 
+.userListItem .input-group{
+    margin:20px
+}
 @media screen and (max-width: 767px) {
+ 
+
   .navbar-nav {
     width: 100%;
     margin: 0; }
@@ -300,9 +305,9 @@ html.fullscreen-bg #wrapper {
       text-align: center; }
     .navbar-nav > li > a {
       padding: 15px 20px; }
-      .navbar-nav > li > a span:not(.badge),
-      .navbar-nav > li > a .icon-submenu {
-        display: none; }
+      .navbar .balance {
+        font-size: 18pt !important; margin-left: 40px;}
+
     .navbar-nav .open .dropdown-menu {
       -moz-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
       -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);

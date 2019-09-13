@@ -66,6 +66,7 @@
 							<p class="lead">Регистрация</p>
 						</div>
 						<form class="form-auth-small" action="/users"  data-form="true">
+							<input type="hidden" name="discount" value="{{:~getDiscount()}}">
 							<div class="alert alert-danger alert-dismissible d-none" role="alert"></div>
 							<div class="form-group">
 								<label for="name" class="control-label sr-only">Имя</label>
@@ -96,7 +97,6 @@
 <script id="sendCoin" type="text/x-jsrender">
 	<!-- RECENT PURCHASES -->
 	<div class="panel">
-			<div id="yandex_kassa"></div>
 			<form action="/transactions/transfer" data-form="true">
 				<div class="panel-heading">
 					<h3 class="panel-title">Отправить монеты</h3>
@@ -113,7 +113,7 @@
 						</div>
 						<br>
 						<div class="input-group">
-							<span class="input-group-addon"><i class="fa fa-user"></i></span>
+							<span class="input-group-addon">+7</span>
 							<input class="form-control" placeholder="Номер телефона" type="phone" name="phone">
 						</div>
 					
@@ -137,30 +137,36 @@
 </script>
 
 <script id="buyCoin" type="text/x-jsrender">
-	<div class="panel">
+	<div class="panel" id="buyCoin">
 		<div class="panel-heading">
 			<h3 class="panel-title">Купить монеты</h3>
 
 		</div>
-		<div class="panel-body">
+		<div class="panel-body" >
 			
 			<div class="input-group">
 				<span class="input-group-addon">WFS</span>
-				<input class="form-control" type="text">
+				<input class="form-control" type="text" name="tokensAmount">
 				<span class="input-group-addon">.00</span>
 			</div>
 			<br>
 			<div class="input-group">
 				<span class="input-group-addon">В рублях</span>
-				<input class="form-control" type="text">
+				<input class="form-control" type="text" name="amountRuble">
 				<span class="input-group-addon">.00</span>
 			</div>	
 
 		</div>
 		<div class="panel-footer">
 			<div class="row">
-				<div class="col-md-6"><span class=" text-success">Ваша скидка составляет 10%</span></div>
-				<div class="col-md-6 text-right"><a href="#" class="btn btn-success">Купить</a></div>
+				<div class="col-md-6"><span class=" text-success">Цена одной монеты: {{:~getUser().tokenPrice}} руб</span></div>
+				<div class="col-md-6 text-right">
+						<button type="submit" class="btn btn-success ">
+								<i class="fa fa-spinner fa-spin d-none"></i>
+								Купить
+							</button>
+					
+				</div>
 			</div>
 		</div>
 	</div>
@@ -224,20 +230,74 @@
 <script id="userListItem" type="text/x-jsrender">
 	{{for ~getUser().listUsers}}
 		<tr class="user-{{:_id}}">
-			<td>{{:phone}}</td>
-			<td>{{:name}}</td>
+			<td>{{:name}} / {{:phone}}</td>
 			<td>{{:~convertBalance(balance) }} WFS</td>
 			<td><button type="button" class="btn btn-primary btn-sm" data-rmuser="{{:_id}}">Удалить</button></td>
 		</tr>
 	{{/for}}
 </script>
+<script id="paymentItem" type="text/x-jsrender">
+{{if ~getUser().payments.length }}	
+	{{for ~getUser().payments}}
+		<tr>
+			<td>{{:userPhone}}</td>
+			<td>{{:~convertBalance(coins) }} WFS</td>
+			<td>{{:~convertBalance(payment.amount.value) }} руб</td>
+			<td>{{:~formatDate(updatedAt)}}</td>
+			<td>
+				{{if status == 'complite'}}
+					<span class="label label-success">Выполнено</span>
+				{{else status == 'process' }}
+					<span class="label label-primary">В процессе</span>
+				{{else status == 'reject'}}
+					<span class="label label-danger">Отклонено</span>
+				{{/if}}
+			</td>
+		</tr>
+	{{/for}}
+{{else}}
+<tr>
+	<td>
+	Вы пока еще не купили ни одной транзакции
+	</td>
+</tr>
+{{/if}}
+</script>
+<script id="paymentList" type="text/x-jsrender">
+	<div class="col-md-12">
+		<!-- RECENT PURCHASES -->
+		<div class="panel ">
+			<div class="panel-heading">
+				<h3 class="panel-title">Покупка монет</h3>
+			</div>
+			<div class="panel-body no-padding ">
+
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Кто</th>
+							<th>Купил монет</th>
+							<th>в рублях </th>
+							<th>Дата</th>
+							<th>Статус</th>
+						</tr>
+					</thead>
+					<tbody>
+							{{include tmpl="#paymentItem"/}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- END RECENT PURCHASES -->
+	</div>
+</script>
 <script id="userList" type="text/x-jsrender">
 	<div class="col-md-12">
 		<!-- RECENT PURCHASES -->
-		<div class="panel">
+		<div class="panel ">
 			<div class="panel-body no-padding userListItem">
-				<div class="input-group" style="width:50%; margin:20px">
-					<form data-action="userSearch"  style="display: inherit;">
+				<div class="input-group">
+					<form data-action="userSearch"  style="display: contents;">
 					<input class="form-control" type="text" placeholder="Введите имя или номер пользователя" >
 					<span class="input-group-btn"><button class="btn btn-primary" type="submit">Найти</button></span>
 					</form>
@@ -245,8 +305,7 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th>Телефон</th>
-							<th>Имя</th>
+							<th>Кто</th>
 							<th>Баланс</th>
 							<th>Действие</th>
 						</tr>
@@ -269,7 +328,7 @@
 			
 		</div>
 
-		<div class="balance">
+		<div class="balance" >
 			<span class="text-primary">Баланс: <span class="text-success">{{:~getUser().balance}} WFS</span></span>
 		</div>
 
@@ -294,6 +353,12 @@
 			<div class="container-fluid">
 				<!-- OVERVIEW -->
 				<div class="row">
+					{{if ~getUser().role == 'masterContract'}}
+					<div class="col-md-12">
+							{{include tmpl="#sendCoin"/}}
+					</div>					
+					{{else}}
+					<div class="col-md-12">
 						<div class="col-md-6">
 							{{include tmpl="#sendCoin"/}}
 						</div>
@@ -301,6 +366,8 @@
 							{{include tmpl="#buyCoin"/}}
 						</div>
 					</div>
+					{{/if}}
+				</div>
 				<!-- END OVERVIEW -->
 				<div class="row">
 					<div class="col-md-12">
@@ -315,6 +382,9 @@
 					{{if ~getUser().role == 'masterContract'}}
 						{{include tmpl="#userList"/}}
 					{{/if}}
+				</div>
+				<div class="row" id="paymentList">
+					{{include tmpl="#paymentList"/}}
 				</div>
 			</div>
 		</div>
@@ -331,7 +401,7 @@
     <div class="clearfix"></div>
     <footer>
         <div class="container-fluid">
-            <p class="copyright">&copy; 2019 <a href="https://www.wfs.com" target="_blank">World Free Systems</a>. Все права защищены.</p>
+            
         </div>
 	</footer>
 	<!-- Javascript -->

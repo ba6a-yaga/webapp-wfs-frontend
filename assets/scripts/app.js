@@ -2,6 +2,13 @@
 $(document).ready(function() {
     init_logs( true );
 
+    var windowHref = new URL(window.location.href); 
+    var discount = windowHref.searchParams.get("personal");
+    var originUrl = windowHref.origin;
+
+    if( discount ){
+        Cookies.set('discount', discount )
+    }
 
 
     tmpl = {
@@ -42,6 +49,42 @@ $(document).ready(function() {
         e.preventDefault();
         $('#wrapper').html(tmpl.login.render())
     })        
+
+    $('body').on('keyup', '[name="tokensAmount"]', function(e){
+        e.preventDefault();
+        var tokensAmount = $(this).val();
+        $('[name="amountRuble"]').val(Number(tokensAmount*UserData.tokenPrice).toFixed(0))
+    })        
+
+    $('body').on('keyup', '[name="amountRuble"]', function(e){
+        e.preventDefault();
+        var amountRuble = $(this).val();
+        $('[name="tokensAmount"]').val(Number(amountRuble/UserData.tokenPrice).toFixed(0))
+    })        
+
+    $('body').on('click','#buyCoin .btn-success', function(e){
+        e.preventDefault();
+        var amountRuble = $('[name="amountRuble"]').val();
+        getAjaxData('/payments',{input:{amount:amountRuble, url:originUrl }}, function(response){
+            if( response.status == 'success' ){
+                window.location.replace(response.redirectUrl)
+            }else(
+                alert(response.textErr)
+            )
+        },'POST','createPayment')
+    })
+
+    var successPayment = windowHref.searchParams.get("successPayment");
+    if(successPayment){
+        getAjaxData('/payments/success',{input:{uuid:successPayment}}, function(response){
+            if( response.status == 'success' ){
+                $('#wrapper').html(tmpl.dashboard.render())  
+            }else(
+                alert(response.textErr)
+            )
+        },'POST','createPayment')        
+    }
+
 
 
     $('body').on('submit', 'form[data-action="userSearch"]', function(e){
@@ -176,7 +219,11 @@ function isMe(phone){
     return Number(phone) == Number(UserData.phone)
 }
 
-$.views.helpers({getUser:getUser,formatDate:formatDate, convertBalance:convertBalance, isMe: isMe });
+function getDiscount(){
+    return Cookies.get('discount')
+}
+
+$.views.helpers({getUser:getUser,formatDate:formatDate, convertBalance:convertBalance, isMe: isMe, getDiscount: getDiscount });
 
 function getFormData(form){
     var data = {};
