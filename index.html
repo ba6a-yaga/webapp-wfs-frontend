@@ -96,6 +96,7 @@
 <script id="sendCoin" type="text/x-jsrender">
 	<!-- RECENT PURCHASES -->
 	<div class="panel">
+			<div id="yandex_kassa"></div>
 			<form action="/transactions/transfer" data-form="true">
 				<div class="panel-heading">
 					<h3 class="panel-title">Отправить монеты</h3>
@@ -169,7 +170,13 @@
 {{if ~getUser().transactions.length }}	
 	{{for ~getUser().transactions }}
 	<tr>
-		<td>{{:accountTo}}</td>
+		<td>
+			{{if ~isMe( accountTo )}}
+				++ Поступление от {{:accountFrom}}
+			{{else}}
+				-- Отправлено на {{:accountTo}}
+			{{/if}}
+		</td>
 		<td>{{:amount}} WFS</td>
 		<td>{{:~formatDate(updatedAt)}}</td>
 		<td>
@@ -333,6 +340,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/1.0.4/jsrender.js"></script>
 	<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 	<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="https://static.yandex.net/checkout/ui/v1/"></script>
 	<script src="assets/scripts/klorofil-common.js"></script>
 	<script src="assets/scripts/app.js"></script>
 </body>
