@@ -1,6 +1,3 @@
-var urlApi = 'http://localhost:8090/api';
-
-
 
 $(document).ready(function() {
     init_logs( true );
