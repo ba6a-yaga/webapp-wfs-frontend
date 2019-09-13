@@ -4,7 +4,7 @@ $(document).ready(function() {
 
     var windowHref = new URL(window.location.href); 
     var discount = windowHref.searchParams.get("personal");
-    var originUrl = windowHref.origin;
+    var originUrl = windowHref.origin+windowHref.pathname;
 
     if( discount ){
         Cookies.set('discount', discount )
