@@ -21,6 +21,46 @@
 	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
 </head>
 
+
+<script id="profile" type="text/x-jsrender">
+	<div class="vertical-align-wrap">
+		<div class="vertical-align-middle">
+			<div class="auth-box ">
+					<div class="content">
+						<div class="header">
+							<h3 class="text-center">Мой профиль</h3>
+							<p class="lead">
+								Номер телефона: {{:~getUser().phone}}<br>
+								<a href="/users/getethkey" data-action="getprivatekey">Получить приватный ключ</a>
+							</p>
+						</div>
+
+						<form class="form-auth-small form" action="/users" data-action="updateProfile">
+							<div class="alert alert-danger alert-dismissible d-none" role="alert"></div>
+							<div class="alert alert-success alert-dismissible d-none" role="alert">Успешно!</div>							
+							<div class="form-group">
+								<label for="name" class="control-label">Имя</label>
+								<input type="text" class="form-control" name="name" value="{{:~getUser().name}}" placeholder="Имя">
+							</div>
+							<div class="form-group">
+								<label for="name" class="control-label">Картра для вывода средств</label>
+								<input type="text" class="form-control" name="card" value="{{:~getUser().card}}" data-validate="card" placeholder="Номер карты">
+							</div>
+							<button type="submit" class="btn btn-primary btn-lg btn-block">Сохранить</button>
+							<div class="bottom">
+								<span class="helper-text"> <a href="#" data-action="dashboard">Вернуться</a></span>
+							</div>
+						</form>
+
+					</div>
+
+
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+</script>
+
 <script id="login" type="text/x-jsrender">
 	<div class="vertical-align-wrap">
 		<div class="vertical-align-middle">
@@ -400,7 +440,7 @@
 			<div id="navbar-menu">
 				<ul class="nav navbar-nav navbar-right">
 					<li >
-						<span class="text-primary">Привет {{:~getUser().name}}!</span>
+						<span class="text-primary">Привет <a href="#" data-action="profile">{{:~getUser().name}}</a>!</span>
 					</li>
 					<li><a href="#" data-action="logout" > <span>Выйти </span></a></li>
 				</ul>
@@ -515,7 +555,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/1.0.4/jsrender.js"></script>
 	<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 	<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-	<script src="https://static.yandex.net/checkout/ui/v1/"></script>
+	<script src="assets/scripts/jquery.creditCardValidator.js"></script>
 	<script src="assets/scripts/klorofil-common.js"></script>
 	<script src="config.js"></script>
 	<script src="assets/scripts/functions.js"></script>

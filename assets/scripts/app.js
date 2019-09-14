@@ -2,6 +2,60 @@
 
 $(document).ready(function() {
 
+    $('body').on('click', '[data-action="dashboard"]', function(e){
+        e.preventDefault();
+        $('#wrapper').html(tmpl.dashboard.render())
+    })
+
+
+    // profile
+
+
+    $('body').on('click', '[data-action="profile"]', function(e){
+        e.preventDefault();
+        $('#wrapper').html(tmpl.profile.render())
+
+
+        //var isValidCard = $('[data-validate="card"]').validateCreditCard();
+
+        //console.log(isValidCard)
+    })
+
+    $('body').on('submit', '[data-action="updateProfile"]', function(e){
+        e.preventDefault();
+        var form = $(this);
+        var data = getFormData(form)
+
+
+        if(data.card.length){
+            var isValidCard = $('[data-validate="card"]').validateCreditCard();
+            if(!isValidCard.valid){
+                form.find('.alert-danger').text('Неверный номер карты').show()
+                return false;
+            }
+        }
+        form.find('button[type="submit"]').attr("disabled", true);
+        form.find('button[type="submit"] i').removeClass('d-none')
+        getAjaxData(form.attr('action'),{input: data}, function(response){
+            form.find('button[type="submit"]').attr("disabled", false);
+            form.find('button[type="submit"] i').addClass('d-none')
+
+            if( response.status == 'success' ){
+                form.find('.alert-success').show()
+                form.find('.alert-danger').hide()
+
+                setTimeout(function(){
+                    form.find('.alert-success').hide()
+                },5000)    
+            }else{
+                form.find('.alert-danger').text(response.textErr).show()
+            }
+        
+             
+        },'PUT',form.attr('action'))
+
+    })
+
     // Logout 
     $('body').on('click', '[data-action="logout"]', function(e){
         e.preventDefault();
@@ -34,10 +88,6 @@ $(document).ready(function() {
         $('[name="tokensAmount"]').val(Number(amountRuble/UserData.tokenPrice).toFixed(0))
     })       
     
-    $('body').on('click', '[data-toggle="tab"]', function(e){
-        e.preventDefault();
-        
-    })
 
     $('body').on('click','#buyCoin .btn-success', function(e){
         e.preventDefault();

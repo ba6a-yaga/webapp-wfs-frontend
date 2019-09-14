@@ -17,7 +17,8 @@ var tmpl = {
     register: $.templates("#register"),
     dashboard: $.templates("#dashboard"),
     userListItem: $.templates("#userListItem"),
-    transactions: $.templates('#transactionItems')
+    transactions: $.templates('#transactionItems'),
+    profile: $.templates('#profile')
 }
 
 $(document).ready(function() {
