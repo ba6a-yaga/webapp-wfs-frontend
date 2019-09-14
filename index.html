@@ -173,95 +173,105 @@
 </script>
 
 <script id="transactionItems" type="text/x-jsrender">
-{{if ~getUser().transactions.length }}	
-	{{for ~getUser().transactions }}
-	<tr>
-		<td>
-			{{if ~isMe( accountTo )}}
-				++ Поступление от {{:accountFrom}}
-			{{else}}
-				-- Отправлено на {{:accountTo}}
-			{{/if}}
-		</td>
-		<td>{{:amount}} WFS</td>
-		<td>{{:~formatDate(updatedAt)}}</td>
-		<td>
-			{{if status == 'complite'}}
-				<span class="label label-success">Выполнено</span>
-			{{else status == 'process' }}
-				<span class="label label-primary">В процессе</span>
-			{{else status == 'new'}}
-				<span class="label label-info">Новая</span>
-			{{else status == 'reject'}}
-				<span class="label label-danger">Отклонено</span>
-			{{/if}}
-		</td>
-
-	</tr>
-	{{/for}}
-{{else}}
+	
+{{for ~getUser().transactions }}
 <tr>
-	<td>
-	Вы пока еще не совершили ни одной транзакции
+	{{if ~isMobile()}}
+	<td> 
+		{{if ~isMe( accountTo )}}
+			++ Поступление от {{:accountFrom}}<br>
+		{{else}}
+			-- Отправлено на {{:accountTo}}<br>
+		{{/if}}	
+		{{:amount}} WFS<br>	
+		{{:~formatDate(updatedAt)}} <br>	
 	</td>
+	{{else}}
+	<td>
+		{{if ~isMe( accountTo )}}
+			++ Поступление от {{:accountFrom}}
+		{{else}}
+			-- Отправлено на {{:accountTo}}
+		{{/if}}
+	</td>
+	<td>{{:amount}} WFS</td>
+	<td>{{:~formatDate(updatedAt)}}</td>
+	{{/if}}
+	<td>
+		{{if status == 'complite'}}
+			<span class="label label-success">Выполнено</span>
+		{{else status == 'process' }}
+			<span class="label label-primary">В процессе</span>
+		{{else status == 'new'}}
+			<span class="label label-info">Новая</span>
+		{{else status == 'reject'}}
+			<span class="label label-danger">Отклонено</span>
+		{{/if}}
+	</td>
+
 </tr>
-{{/if}}
+{{/for}}
+
 </script>
 <script id="transactionList" type="text/x-jsrender">
 	<div class="panel-heading">
 		<h3 class="panel-title">Мои транзакции</h3>
 	</div>
 	<div class="panel-body no-padding" id="transactions">
+		{{if ~getUser().transactions.length }}	
 		<table class="table table-striped">
 			<thead>
 				<tr>
+					{{if ~isMobile()}}
+					<th>Кому</th>
+					<th>Статус</th>
+					{{else}}
 					<th>Кому</th>
 					<th>Сколько</th>
 					<th>Дата &amp; Время</th>
 					<th>Статус</th>
+					{{/if}}
 				</tr>
 			</thead>
 			<tbody>
 				{{include tmpl="#transactionItems"/}}
 			</tbody>
 		</table>
+		{{else}}
+			<p style="margin-left:20px">Вы пока еще не совершили ни одной транзакции</p>
+		{{/if}}
 	</div>
 </script>
-<script id="userListItem" type="text/x-jsrender">
-	{{for ~getUser().listUsers}}
-		<tr class="user-{{:_id}}">
-			<td>{{:name}} / {{:phone}}</td>
-			<td>{{:~convertBalance(balance) }} WFS</td>
-			<td><button type="button" class="btn btn-primary btn-sm" data-rmuser="{{:_id}}">Удалить</button></td>
-		</tr>
-	{{/for}}
-</script>
+
 <script id="paymentItem" type="text/x-jsrender">
-{{if ~getUser().payments.length }}	
-	{{for ~getUser().payments}}
-		<tr>
-			<td>{{:userPhone}}</td>
-			<td>{{:~convertBalance(coins) }} WFS</td>
-			<td>{{:~convertBalance(payment.amount.value) }} руб</td>
-			<td>{{:~formatDate(updatedAt)}}</td>
-			<td>
-				{{if status == 'complite'}}
-					<span class="label label-success">Выполнено</span>
-				{{else status == 'process' }}
-					<span class="label label-primary">В процессе</span>
-				{{else status == 'reject'}}
-					<span class="label label-danger">Отклонено</span>
-				{{/if}}
-			</td>
-		</tr>
-	{{/for}}
-{{else}}
-<tr>
-	<td>
-	Вы пока еще не купили ни одной транзакции
-	</td>
-</tr>
-{{/if}}
+
+{{for ~getUser().payments}}
+	<tr>
+		{{if ~isMobile()}}
+		<td>
+				Тел.: {{:userPhone}}<br>
+				Купил монет: {{:~convertBalance(coins) }} WFS<br>
+				В рублях: {{:~convertBalance(payment.amount.value) }} руб <br>
+				Дата: {{:~formatDate(updatedAt)}}
+		</td>
+		{{else}}
+		<td>{{:userPhone}}</td>
+		<td>{{:~convertBalance(coins) }} WFS</td>
+		<td>{{:~convertBalance(payment.amount.value) }} руб</td>
+		<td>{{:~formatDate(updatedAt)}}</td>
+		{{/if}}
+		<td>
+			{{if status == 'complite'}}
+				<span class="label label-success">Выполнено</span>
+			{{else status == 'process' }}
+				<span class="label label-primary">В процессе</span>
+			{{else status == 'reject'}}
+				<span class="label label-danger">Отклонено</span>
+			{{/if}}
+		</td>
+	</tr>
+{{/for}}
+
 </script>
 <script id="paymentList" type="text/x-jsrender">
 	<div class="col-md-12">
@@ -271,14 +281,18 @@
 				<h3 class="panel-title">Покупка монет</h3>
 			</div>
 			<div class="panel-body no-padding ">
-
+				{{if ~getUser().payments.length }}	
 				<table class="table table-striped">
 					<thead>
 						<tr>
+							{{if ~isMobile()}}
+							<th>Информация</th>
+							{{else}}
 							<th>Кто</th>
 							<th>Купил монет</th>
 							<th>в рублях </th>
 							<th>Дата</th>
+							{{/if}}
 							<th>Статус</th>
 						</tr>
 					</thead>
@@ -286,10 +300,26 @@
 							{{include tmpl="#paymentItem"/}}
 					</tbody>
 				</table>
+				{{else}}
+				<p style="margin-left:20px">Вы не совершили ни одной покупки</p>
+				{{/if}}
 			</div>
 		</div>
 		<!-- END RECENT PURCHASES -->
 	</div>
+</script>
+<script id="userListItem" type="text/x-jsrender">
+	{{for ~getUser().listUsers}}
+		<tr class="user-{{:_id}}">
+			{{if ~isMobile()}}
+			<td>{{:name}} / {{:phone}}<br>{{:~convertBalance(balance) }} WFS</td>
+			{{else}}
+			<td>{{:name}} / {{:phone}}</td>
+			<td>{{:~convertBalance(balance) }} WFS</td>
+			{{/if}}
+			<td><button type="button" class="btn btn-primary btn-sm" data-rmuser="{{:_id}}">Удалить</button></td>
+		</tr>
+	{{/for}}
 </script>
 <script id="userList" type="text/x-jsrender">
 	<div class="col-md-12">
@@ -305,8 +335,12 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
+							{{if ~isMobile()}}
+							<th>Кто</th>
+							{{else}}
 							<th>Кто</th>
 							<th>Баланс</th>
+							{{/if}}
 							<th>Действие</th>
 						</tr>
 					</thead>
@@ -413,5 +447,7 @@
 	<script src="https://static.yandex.net/checkout/ui/v1/"></script>
 	<script src="assets/scripts/klorofil-common.js"></script>
 	<script src="config.js"></script>
+	<script src="assets/scripts/functions.js"></script>
+	<script src="assets/scripts/init.js"></script>
 	<script src="assets/scripts/app.js"></script>
 </body>
