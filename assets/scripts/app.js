@@ -32,7 +32,12 @@ $(document).ready(function() {
         e.preventDefault();
         var amountRuble = $(this).val();
         $('[name="tokensAmount"]').val(Number(amountRuble/UserData.tokenPrice).toFixed(0))
-    })        
+    })       
+    
+    $('body').on('click', '[data-toggle="tab"]', function(e){
+        e.preventDefault();
+        
+    })
 
     $('body').on('click','#buyCoin .btn-success', function(e){
         e.preventDefault();
@@ -84,7 +89,41 @@ $(document).ready(function() {
 
     })
 
-    // all forms
+
+    $('body').on('submit', '[data-adduserdashboard="true"]', function(e){
+        e.preventDefault();
+        var form = $(this);
+        var data = getFormData(form)
+        form.find('button[type="submit"]').attr("disabled", true);
+        form.find('button[type="submit"] i').removeClass('d-none')
+
+        getAjaxData(form.attr('action'),{input: data}, function(response){
+            form.find('button[type="submit"]').attr("disabled", false);
+            form.find('button[type="submit"] i').addClass('d-none')
+
+            if( response.status == 'success' ){
+                form.find('.alert-success').show()
+                form.find('.alert-danger').hide()
+                form[0].reset()
+
+                getAjaxData('/users/current',{},function(response){
+                        window.UserData = response.user;
+                        updateUserList()
+                },'GET', 'Get current');
+
+                setTimeout(function(){
+                    form.find('.alert-success').hide()
+                },5000)    
+            }else{
+                form.find('.alert-danger').text(response.textErr).show()
+            }
+        
+             
+        },'POST',form.attr('action'))
+
+    });
+
+
     $('body').on('submit', 'form[data-form="true"]', function(e){
         e.preventDefault();
 
@@ -108,7 +147,6 @@ $(document).ready(function() {
                 },5000)
 
                 form.find('input').each(function(el){
-                    logs($(this))
                     $(this).val('')
                 })
             }else{
@@ -158,6 +196,7 @@ $(document).ready(function() {
 
     // delete user
     $('body').on('click', '[data-rmuser]',function(e){
+        e.preventDefault();
         var userid = $(this).attr('data-rmuser');
         var isDelete = confirm("Вы точно хотите удалить этого пользователя?");
         
@@ -170,5 +209,25 @@ $(document).ready(function() {
                 }
             },'DELETE','delete user')
     })    
+
+    // lock user
+    $('body').on('click', '[data-lockuser]',function(e){
+        e.preventDefault();
+        var userid = $(this).attr('data-lockuser');
+        var isLock = confirm("Вы уверены?");
+        var link = $(this);
+        if( isLock )
+            getAjaxData('/users/lock/'+userid,{}, function(response){
+                if(response.status == 'success'){
+                    if( response.lock )
+                        link.text('Разблокировать')
+                    else
+                        link.text('Заблокировать')
+
+                }else{
+                    alert(response.textErr)
+                }
+            },'PUT','delete user')
+    })      
 
 })

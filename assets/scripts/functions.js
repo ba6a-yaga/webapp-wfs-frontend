@@ -32,10 +32,9 @@ $.views.helpers({isMobile: isMobile, getUser:getUser,formatDate:formatDate, conv
 
 function getFormData(form){
     var data = {};
-    form.find('input').each(function(){
-        var name = $(this).attr('name');
-        var value = $(this).val();
-        data[name] = value;
+
+    form.serializeArray().forEach(function(item){
+        data[item.name] = item.value;
     })
     return data;
 }

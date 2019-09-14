@@ -96,11 +96,9 @@
 </script>
 <script id="sendCoin" type="text/x-jsrender">
 	<!-- RECENT PURCHASES -->
-	<div class="panel">
+	<div>
 			<form action="/transactions/transfer" data-form="true">
-				<div class="panel-heading">
-					<h3 class="panel-title">Отправить монеты</h3>
-				</div>
+
 				<div class="panel-body">
 						<div class="alert alert-success alert-dismissible d-none" role="alert">
 								<i class="fa fa-check-circle"></i> Монеты отправлены!
@@ -137,11 +135,7 @@
 </script>
 
 <script id="buyCoin" type="text/x-jsrender">
-	<div class="panel" id="buyCoin">
-		<div class="panel-heading">
-			<h3 class="panel-title">Купить монеты</h3>
-
-		</div>
+	<div id="buyCoin">
 		<div class="panel-body" >
 			
 			<div class="input-group">
@@ -161,11 +155,10 @@
 			<div class="row">
 				<div class="col-md-6"><span class=" text-success">Цена одной монеты: {{:~getUser().tokenPrice}} руб</span></div>
 				<div class="col-md-6 text-right">
-						<button type="submit" class="btn btn-success ">
-								<i class="fa fa-spinner fa-spin d-none"></i>
-								Купить
-							</button>
-					
+					<button type="submit" class="btn btn-success ">
+						<i class="fa fa-spinner fa-spin d-none"></i>
+						Купить
+					</button>
 				</div>
 			</div>
 		</div>
@@ -214,33 +207,30 @@
 
 </script>
 <script id="transactionList" type="text/x-jsrender">
-	<div class="panel-heading">
-		<h3 class="panel-title">Мои транзакции</h3>
-	</div>
-	<div class="panel-body no-padding" id="transactions">
-		{{if ~getUser().transactions.length }}	
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					{{if ~isMobile()}}
-					<th>Кому</th>
-					<th>Статус</th>
-					{{else}}
-					<th>Кому</th>
-					<th>Сколько</th>
-					<th>Дата &amp; Время</th>
-					<th>Статус</th>
-					{{/if}}
-				</tr>
-			</thead>
-			<tbody>
-				{{include tmpl="#transactionItems"/}}
-			</tbody>
-		</table>
-		{{else}}
-			<p style="margin-left:20px">Вы пока еще не совершили ни одной транзакции</p>
-		{{/if}}
-	</div>
+
+{{if ~getUser().transactions.length }}	
+<table class="table table-striped">
+	<thead>
+		<tr>
+			{{if ~isMobile()}}
+			<th>Кому</th>
+			<th>Статус</th>
+			{{else}}
+			<th>Кому</th>
+			<th>Сколько</th>
+			<th>Дата &amp; Время</th>
+			<th>Статус</th>
+			{{/if}}
+		</tr>
+	</thead>
+	<tbody>
+		{{include tmpl="#transactionItems"/}}
+	</tbody>
+</table>
+{{else}}
+	<p style="margin-left:20px">Вы пока еще не совершили ни одной транзакции</p>
+{{/if}}
+
 </script>
 
 <script id="paymentItem" type="text/x-jsrender">
@@ -274,39 +264,28 @@
 
 </script>
 <script id="paymentList" type="text/x-jsrender">
-	<div class="col-md-12">
-		<!-- RECENT PURCHASES -->
-		<div class="panel ">
-			<div class="panel-heading">
-				<h3 class="panel-title">Покупка монет</h3>
-			</div>
-			<div class="panel-body no-padding ">
-				{{if ~getUser().payments.length }}	
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							{{if ~isMobile()}}
-							<th>Информация</th>
-							{{else}}
-							<th>Кто</th>
-							<th>Купил монет</th>
-							<th>в рублях </th>
-							<th>Дата</th>
-							{{/if}}
-							<th>Статус</th>
-						</tr>
-					</thead>
-					<tbody>
-							{{include tmpl="#paymentItem"/}}
-					</tbody>
-				</table>
+	{{if ~getUser().payments.length }}	
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				{{if ~isMobile()}}
+				<th>Информация</th>
 				{{else}}
-				<p style="margin-left:20px">Вы не совершили ни одной покупки</p>
+				<th>Кто</th>
+				<th>Купил монет</th>
+				<th>в рублях </th>
+				<th>Дата</th>
 				{{/if}}
-			</div>
-		</div>
-		<!-- END RECENT PURCHASES -->
-	</div>
+				<th>Статус</th>
+			</tr>
+		</thead>
+		<tbody>
+				{{include tmpl="#paymentItem"/}}
+		</tbody>
+	</table>
+	{{else}}
+	<p style="margin-left:20px">Вы не совершили ни одной покупки</p>
+	{{/if}}
 </script>
 <script id="userListItem" type="text/x-jsrender">
 	{{for ~getUser().listUsers}}
@@ -317,18 +296,25 @@
 			<td>{{:name}} / {{:phone}}</td>
 			<td>{{:~convertBalance(balance) }} WFS</td>
 			{{/if}}
-			<td><button type="button" class="btn btn-primary btn-sm" data-rmuser="{{:_id}}">Удалить</button></td>
+			<td>
+				<a href="#" class="text-warning" data-lockuser="{{:_id}}">
+					{{if lock}}
+					Разблокировать
+					{{else}}
+					Заблокировать
+					{{/if}}
+				</a><br>				
+				<a href="#" class="text-danger" data-rmuser="{{:_id}}">Удалить</a>
+			</td>
 		</tr>
 	{{/for}}
 </script>
 <script id="userList" type="text/x-jsrender">
-	<div class="col-md-12">
-		<!-- RECENT PURCHASES -->
-		<div class="panel ">
+
 			<div class="panel-body no-padding userListItem">
 				<div class="input-group">
 					<form data-action="userSearch"  style="display: contents;">
-					<input class="form-control" type="text" placeholder="Введите имя или номер пользователя" >
+					<input class="form-control" type="text" placeholder="Введите номер пользователя" >
 					<span class="input-group-btn"><button class="btn btn-primary" type="submit">Найти</button></span>
 					</form>
 				</div>	
@@ -349,9 +335,52 @@
 					</tbody>
 				</table>
 			</div>
+
+</script>
+
+<script id="addUser" type="text/x-jsrender">
+	<form class="form-auth-small" action="/users"  data-adduserdashboard="true">
+		<div class="alert alert-danger alert-dismissible d-none" role="alert"></div>
+		<div class="alert alert-success alert-dismissible d-none" role="alert">Успешно добавлен!</div>
+		<div class="form-group">
+			<label for="name" class="control-label sr-only">Имя</label>
+			<input type="text" class="form-control" name="name" value="" placeholder="Имя">
+			<br>
+			<p>Роль:</p>
+			<label class="fancy-radio">
+				<input name="role" value="user" type="radio" checked="checked">
+				<span><i></i>Пользователь</span>
+			</label>
+			<label class="fancy-radio">
+				<input name="role" value="admin" type="radio">
+				<span><i></i>Админ</span>
+			</label>
+			<p>Скидка на покупку монет:</p>			
+			<label class="fancy-radio">
+				<input name="discount" value="default" type="radio" checked="checked">
+				<span><i></i>3%</span>
+			</label>
+			<label class="fancy-radio">
+				<input name="discount" value="gold" type="radio">
+				<span><i></i>7%</span>
+			</label>
+			<label class="fancy-radio">
+				<input name="discount" value="platinum" type="radio">
+				<span><i></i>10%</span>
+			</label>							
 		</div>
-		<!-- END RECENT PURCHASES -->
-	</div>
+		<div class="input-group">
+			<span class="input-group-addon">+7</span>
+			<input type="phone" class="form-control" name="phone" value="" placeholder="Телефон">
+		</div>
+		<br>
+		<p class="text-center">Пароль придет на телефон</p>
+		<button type="submit" class="btn btn-primary btn-lg btn-block">
+			<i class="fa fa-spinner fa-spin d-none"></i>
+			Отправить
+		</button>
+
+	</form>	
 </script>
 
 <script id="dashboard" type="text/x-jsrender">
@@ -387,39 +416,81 @@
 			<div class="container-fluid">
 				<!-- OVERVIEW -->
 				<div class="row">
-					{{if ~getUser().role == 'masterContract'}}
+
 					<div class="col-md-12">
-							{{include tmpl="#sendCoin"/}}
-					</div>					
-					{{else}}
-					<div class="col-md-12">
-						<div class="col-md-6">
-							{{include tmpl="#sendCoin"/}}
-						</div>
-						<div class="col-md-6">
-							{{include tmpl="#buyCoin"/}}
+						<div class="panel">
+							<div class="custom-tabs-line tabs-line-bottom left-aligned">
+								<ul class="nav" role="tablist">
+									<li class="active"><a href="#tab-bottom-left1" role="tab" data-toggle="tab">Отправить моенты</a></li>
+									{{if ~getUser().role != 'masterContract'}}
+									<li><a href="#tab-bottom-left2" role="tab" data-toggle="tab">Купить монеты</a></li>
+									{{/if}}
+								</ul>
+							</div>
+							<div class="tab-content">
+								<div class="tab-pane fade in active" id="tab-bottom-left1">
+									{{include tmpl="#sendCoin"/}}
+								</div>
+								{{if ~getUser().role != 'masterContract'}}
+								<div class="tab-pane fade" id="tab-bottom-left2">
+									{{include tmpl="#buyCoin"/}}
+								</div>
+								{{/if}}
+							</div>
 						</div>
 					</div>
-					{{/if}}
 				</div>
 				<!-- END OVERVIEW -->
 				<div class="row">
 					<div class="col-md-12">
 						<!-- RECENT PURCHASES -->
 						<div class="panel">
-							{{include tmpl="#transactionList"/}}
+
+							<div class="custom-tabs-line tabs-line-bottom left-aligned">
+								<ul class="nav" role="tablist">
+									<li class="active"><a href="#tab-transaction-left1" role="tab" data-toggle="tab">Транзакции монет</a></li>									
+									<li><a href="#tab-transaction-left2" role="tab" data-toggle="tab">Оплаты</a></li>
+
+								</ul>
+							</div>
+							<div class="tab-content">
+								<div class="tab-pane fade in active" id="tab-transaction-left1">
+									{{include tmpl="#transactionList"/}}
+								</div>
+								<div class="tab-pane fade" id="tab-transaction-left2">
+									{{include tmpl="#paymentList"/}}
+								</div>
+							</div>
 						</div>
 						<!-- END RECENT PURCHASES -->
 					</div>
 				</div>
+				{{if ~getUser().role == 'masterContract'}}
 				<div class="row" id="userList">
-					{{if ~getUser().role == 'masterContract'}}
-						{{include tmpl="#userList"/}}
-					{{/if}}
+						<div class="col-md-12">
+							<!-- RECENT PURCHASES -->
+							<div class="panel">
+	
+								<div class="custom-tabs-line tabs-line-bottom left-aligned">
+									<ul class="nav" role="tablist">
+										<li class="active"><a href="#tab-users-left1" role="tab" data-toggle="tab">Пользователи</a></li>									
+										<li><a href="#tab-users-left2" role="tab" data-toggle="tab">Добавить пользователя</a></li>
+									</ul>
+								</div>
+								<div class="tab-content">
+									<div class="tab-pane fade in active" id="tab-users-left1">
+										{{include tmpl="#userList"/}}
+									</div>
+									<div class="tab-pane fade" id="tab-users-left2">
+										{{include tmpl="#addUser"/}}
+									</div>
+								</div>
+							</div>
+							<!-- END RECENT PURCHASES -->
+						</div>
 				</div>
-				<div class="row" id="paymentList">
-					{{include tmpl="#paymentList"/}}
-				</div>
+				{{/if}}
+
 			</div>
 		</div>
 		<!-- END MAIN CONTENT -->
