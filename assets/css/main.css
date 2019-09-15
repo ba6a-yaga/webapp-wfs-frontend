@@ -1098,7 +1098,7 @@ ul.activity-list > li {
   @media screen and (min-width: 1440px) {
     .auth-box.lockscreen {
       width: 35%; } }
-  @media screen and (max-width: 1279px) {
+  @media screen and (max-width: 1900px) {
     .auth-box {
       width: 40%; }
       .auth-box .left {
