@@ -14,12 +14,32 @@ $(document).ready(function() {
     $('body').on('click', '[data-action="profile"]', function(e){
         e.preventDefault();
         $('#wrapper').html(tmpl.profile.render())
-
-
-        //var isValidCard = $('[data-validate="card"]').validateCreditCard();
-
-        //console.log(isValidCard)
     })
+
+
+    $('body').on('click', '[data-action="getprivatekey"]', function(e){
+        e.preventDefault();
+        password = prompt('Подтверждение', 'Введите пароль');
+        var clickLink = $(this)
+
+        if(password == null)
+            return false;
+        
+        getAjaxData('/users/current/getmnemonic',{input: {password: password}}, function(response){
+
+            if( response.status == 'success' ){
+                $('#mnemonic').val(response.mnemonic).show()
+                clickLink.hide()
+            }else{
+                alert(response.textErr)
+            }
+        
+                
+        },'POST','/users/current/getmnemonic')
+        
+    })
+
+    
 
     $('body').on('submit', '[data-action="updateProfile"]', function(e){
         e.preventDefault();
@@ -36,6 +56,7 @@ $(document).ready(function() {
         }
         form.find('button[type="submit"]').attr("disabled", true);
         form.find('button[type="submit"] i').removeClass('d-none')
+
         getAjaxData(form.attr('action'),{input: data}, function(response){
             form.find('button[type="submit"]').attr("disabled", false);
             form.find('button[type="submit"] i').addClass('d-none')
@@ -79,13 +100,15 @@ $(document).ready(function() {
     $('body').on('keyup', '[name="tokensAmount"]', function(e){
         e.preventDefault();
         var tokensAmount = $(this).val();
-        $('[name="amountRuble"]').val(Number(tokensAmount*UserData.tokenPrice).toFixed(0))
+        var parent = $(this).parents('.panel-body')
+        $('[name="amountRuble"]',parent).val(Number(tokensAmount*UserData.tokenPrice).toFixed(0))
     })        
 
     $('body').on('keyup', '[name="amountRuble"]', function(e){
         e.preventDefault();
         var amountRuble = $(this).val();
-        $('[name="tokensAmount"]').val(Number(amountRuble/UserData.tokenPrice).toFixed(0))
+        var parent = $(this).parents('.panel-body')
+        $('[name="tokensAmount"]', parent).val(Number(amountRuble/UserData.tokenPrice).toFixed(0))
     })       
     
 
@@ -102,6 +125,45 @@ $(document).ready(function() {
     })
     // buy tokens end
 
+    $('body').on('click','#sellCoin .btn-success', function(e){
+        e.preventDefault();
+
+        var parent = $(this).parents('#sellCoin')
+        var amountRuble = $('[name="amountRuble"]', parent).val();
+        $('button[type="submit"]', parent).attr("disabled", true);
+        $('button[type="submit"] i', parent).removeClass('d-none')
+
+        getAjaxData('/withdrawal',{input:{amount:amountRuble}}, function(response){
+            $('button[type="submit"]', parent).attr("disabled", false);
+            $('button[type="submit"] i', parent).addClass('d-none')
+            
+            if( response.status == 'success' ){
+                $('.alert-danger', parent).hide()
+                $('.alert-success', parent).show()
+            }else(
+                $('.alert-danger', parent).text(response.textErr).show()
+            )
+        },'POST','withdrawal')
+    })
+
+
+    $('body').on('change', '[data-action="changeStatusWithdrawal"]', function(e){
+        e.preventDefault();
+        var status = $(this).val();
+        var id = $(this).attr('data-id');
+        var text = $(':selected',this).text()
+
+        if(confirm('Вы уверены что хотите изменить статус на '+text)){
+            getAjaxData('/withdrawal',{input:{id:id,status:status}}, function(response){
+                if( response.status == 'success' ){
+                    
+                }else(
+                    alert(response.textErr)
+                )
+            },'PUT','withdrawal')                 
+        }
+
+    })
 
     var successPayment = windowHref.searchParams.get("successPayment");
     if(successPayment){

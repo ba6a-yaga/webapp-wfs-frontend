@@ -31,10 +31,11 @@
 							<h3 class="text-center">Мой профиль</h3>
 							<p class="lead">
 								Номер телефона: {{:~getUser().phone}}<br>
-								<a href="/users/getethkey" data-action="getprivatekey">Получить приватный ключ</a>
+								<a href="#" data-action="getprivatekey">Получить приватный ключ</a>
 							</p>
+							<input type="input" name="mnemonic" id="mnemonic" class="form-control d-none" disabled value="">
 						</div>
-
+						
 						<form class="form-auth-small form" action="/users" data-action="updateProfile">
 							<div class="alert alert-danger alert-dismissible d-none" role="alert"></div>
 							<div class="alert alert-success alert-dismissible d-none" role="alert">Успешно!</div>							
@@ -204,7 +205,39 @@
 		</div>
 	</div>
 </script>
+<script id="sellCoin" type="text/x-jsrender">
+	<div id="sellCoin">
+		<div class="panel-body" >
+			<div class="alert alert-success alert-dismissible d-none" role="alert">
+					<i class="fa fa-check-circle"></i> Запрос отправлен!
+			</div>
+			<div class="alert alert-danger alert-dismissible d-none" role="alert"></div>			
+			<div class="input-group">
+				<span class="input-group-addon">WFS</span>
+				<input class="form-control" type="text" name="tokensAmount">
+				<span class="input-group-addon">.00</span>
+			</div>
+			<br>
+			<div class="input-group">
+				<span class="input-group-addon">В рублях</span>
+				<input class="form-control" type="text" name="amountRuble">
+				<span class="input-group-addon">.00</span>
+			</div>	
 
+		</div>
+		<div class="panel-footer">
+			<div class="row">
+				<div class="col-md-6"><span class=" text-success">Цена одной монеты: {{:~getUser().tokenPrice}} руб</span></div>
+				<div class="col-md-6 text-right">
+					<button type="submit" class="btn btn-success ">
+						<i class="fa fa-spinner fa-spin d-none"></i>
+						Продать
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
 <script id="transactionItems" type="text/x-jsrender">
 	
 {{for ~getUser().transactions }}
@@ -272,7 +305,80 @@
 {{/if}}
 
 </script>
+<script id="withdrawalItem" type="text/x-jsrender">
 
+{{for ~getUser().withdrawal}}
+	<tr>
+		{{if ~isMobile()}}
+		<td>
+				{{if ~getUser().role == 'admin' || ~getUser().role == 'masterContract'}}
+				Тел.: {{:userPhone}}<br>
+				{{/if}}
+				Купил монет: {{:~convertBalance(coins) }} WFS<br>
+				В рублях: {{:~convertBalance(amountRubble) }} руб <br>
+				Реквизиты: {{:card }}<br>
+				Дата: {{:~formatDate(updatedAt)}}
+		</td>
+		{{else}}
+		{{if ~getUser().role == 'admin' || ~getUser().role == 'masterContract'}}
+		<td>{{:userPhone}}</td>
+		{{/if}}
+		<td>{{:~convertBalance(coins) }} WFS</td>
+		<td>{{:~convertBalance(amountRubble) }} руб</td>
+		<td>{{:card }}</td>
+		<td>{{:~formatDate(updatedAt)}}</td>
+		{{/if}}
+		<td>
+			{{if ~getUser().role == 'admin' || ~getUser().role == 'masterContract'}}
+				<select class="form-control input-sm" data-action="changeStatusWithdrawal" data-id="{{:_id}}">
+					<option value="new" {{if status == 'new'}}selected{{/if}} >Новая</option>
+					<option value="process"  {{if status == 'process'}}selected{{/if}}>В процессе</option>
+					<option value="reject"  {{if status == 'reject'}}selected{{/if}}>Отклонено</option>
+					<option value="complite"  {{if status == 'complite'}}selected{{/if}}>Выполнено</option>
+				</select>				
+			{{else}}
+				{{if status == 'complite'}}
+					<span class="label label-success">Выполнено</span>
+				{{else status == 'process' }}
+					<span class="label label-primary">В процессе</span>
+				{{else status == 'new'}}
+					<span class="label label-info">Новая</span>				
+				{{else status == 'reject'}}
+					<span class="label label-danger">Отклонено</span>
+				{{/if}}
+			{{/if}}
+		</td>
+	</tr>
+{{/for}}
+
+</script>
+<script id="withdrawalList" type="text/x-jsrender">
+	{{if ~getUser().withdrawal.length }}	
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				{{if ~isMobile()}}
+				<th>Информация</th>
+				{{else}}
+				{{if ~getUser().role == 'admin' || ~getUser().role == 'masterContract'}}
+				<th>Кто</th>
+				{{/if}}
+				<th>монет</th>
+				<th>в рублях </th>
+				<th>Реквизиты</td>
+				<th>Дата</th>
+				{{/if}}
+				<th>Статус</th>
+			</tr>
+		</thead>
+		<tbody>
+				{{include tmpl="#withdrawalItem"/}}
+		</tbody>
+	</table>
+	{{else}}
+	<p style="margin-left:20px">Вы еще не выводили монеты</p>
+	{{/if}}
+</script>
 <script id="paymentItem" type="text/x-jsrender">
 
 {{for ~getUser().payments}}
@@ -440,7 +546,7 @@
 			<div id="navbar-menu">
 				<ul class="nav navbar-nav navbar-right">
 					<li >
-						<span class="text-primary">Привет <a href="#" data-action="profile">{{:~getUser().name}}</a>!</span>
+						<span class="text-primary">Привет <a href="#" data-action="profile" style="text-decoration:underline">{{:~getUser().name}}</a>!</span>
 					</li>
 					<li><a href="#" data-action="logout" > <span>Выйти </span></a></li>
 				</ul>
@@ -462,8 +568,9 @@
 							<div class="custom-tabs-line tabs-line-bottom left-aligned">
 								<ul class="nav" role="tablist">
 									<li class="active"><a href="#tab-bottom-left1" role="tab" data-toggle="tab">Отправить моенты</a></li>
-									{{if ~getUser().role != 'masterContract'}}
+									{{if ~getUser().role != 'masterContract' && ~getUser().role != 'admin'}}
 									<li><a href="#tab-bottom-left2" role="tab" data-toggle="tab">Купить монеты</a></li>
+									<li><a href="#tab-bottom-left3" role="tab" data-toggle="tab">Продать монеты</a></li>
 									{{/if}}
 								</ul>
 							</div>
@@ -471,16 +578,21 @@
 								<div class="tab-pane fade in active" id="tab-bottom-left1">
 									{{include tmpl="#sendCoin"/}}
 								</div>
-								{{if ~getUser().role != 'masterContract'}}
+								{{if ~getUser().role != 'masterContract' && ~getUser().role != 'admin'}}
 								<div class="tab-pane fade" id="tab-bottom-left2">
 									{{include tmpl="#buyCoin"/}}
 								</div>
+								<div class="tab-pane fade" id="tab-bottom-left3">
+										{{include tmpl="#sellCoin"/}}
+								</div>								
 								{{/if}}
 							</div>
 						</div>
 					</div>
 				</div>
 				<!-- END OVERVIEW -->
+
+				{{if ~getUser().transactions.length || ~getUser().payments.length || ~getUser().withdrawal.length }}
 				<div class="row">
 					<div class="col-md-12">
 						<!-- RECENT PURCHASES -->
@@ -488,24 +600,41 @@
 
 							<div class="custom-tabs-line tabs-line-bottom left-aligned">
 								<ul class="nav" role="tablist">
+									{{if ~getUser().transactions.length }}
 									<li class="active"><a href="#tab-transaction-left1" role="tab" data-toggle="tab">Транзакции монет</a></li>									
+									{{/if}}
+									{{if ~getUser().payments.length }}
 									<li><a href="#tab-transaction-left2" role="tab" data-toggle="tab">Оплаты</a></li>
+									{{/if}}
+									{{if ~getUser().withdrawal.length }}
+									<li><a href="#tab-transaction-left3" role="tab" data-toggle="tab">Вывод монет</a></li>
+									{{/if}}									
 
 								</ul>
 							</div>
 							<div class="tab-content">
+								{{if ~getUser().transactions.length }}
 								<div class="tab-pane fade in active" id="tab-transaction-left1">
 									{{include tmpl="#transactionList"/}}
 								</div>
+								{{/if}}
+								{{if ~getUser().payments.length}}
 								<div class="tab-pane fade" id="tab-transaction-left2">
 									{{include tmpl="#paymentList"/}}
 								</div>
+								{{/if}}
+								{{if ~getUser().withdrawal.length}}
+								<div class="tab-pane fade" id="tab-transaction-left3">
+									{{include tmpl="#withdrawalList"/}}
+								</div>
+								{{/if}}
 							</div>
 						</div>
 						<!-- END RECENT PURCHASES -->
 					</div>
 				</div>
-				{{if ~getUser().role == 'masterContract'}}
+				{{/if}}
+				{{if ~getUser().role == 'masterContract' && ~getUser().role != 'admin'}}
 				<div class="row" id="userList">
 						<div class="col-md-12">
 							<!-- RECENT PURCHASES -->
