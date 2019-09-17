@@ -1,0 +1,37 @@
+<div class="vertical-align-wrap">
+    <div class="vertical-align-middle">
+        <div class="auth-box ">
+                <div class="content">
+                    <div class="header">
+                        <h3 class="text-center">Мой профиль</h3>
+                        <p class="lead">
+                            Номер телефона: {{:~getUser().phone}}<br>
+                            <a href="#" data-action="getprivatekey">Получить приватный ключ</a>
+                        </p>
+                        <input type="input" name="mnemonic" id="mnemonic" class="form-control d-none" disabled value="">
+                    </div>
+                    
+                    <form class="form-auth-small form" action="/users" data-action="updateProfile">
+                        <div class="alert alert-danger alert-dismissible d-none" role="alert"></div>
+                        <div class="alert alert-success alert-dismissible d-none" role="alert">Успешно!</div>							
+                        <div class="form-group">
+                            <label for="name" class="control-label">Имя</label>
+                            <input type="text" class="form-control" name="name" value="{{:~getUser().name}}" placeholder="Имя">
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="control-label">Картра для вывода средств</label>
+                            <input type="text" class="form-control" name="card" value="{{:~getUser().card}}" data-validate="card" placeholder="Номер карты">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Сохранить</button>
+                        <div class="bottom">
+                            <span class="helper-text"> <a href="#" data-action="dashboard">Вернуться</a></span>
+                        </div>
+                    </form>
+
+                </div>
+
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

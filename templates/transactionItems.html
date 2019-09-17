@@ -1,0 +1,38 @@
+	
+{{for ~getUser().transactions }}
+<tr>
+	{{if ~isMobile()}}
+	<td> 
+		{{if ~isMe( accountTo )}}
+			++ Поступление от {{:accountFrom}}<br>
+		{{else}}
+			-- Отправлено на {{:accountTo}}<br>
+		{{/if}}	
+		{{:amount}} WFS<br>	
+		{{:~formatDate(updatedAt)}} <br>	
+	</td>
+	{{else}}
+	<td>
+		{{if ~isMe( accountTo )}}
+			++ Поступление от {{:accountFrom}}
+		{{else}}
+			-- Отправлено на {{:accountTo}}
+		{{/if}}
+	</td>
+	<td>{{:amount}} WFS</td>
+	<td>{{:~formatDate(updatedAt)}}</td>
+	{{/if}}
+	<td>
+		{{if status == 'complite'}}
+			<span class="label label-success">Выполнено</span>
+		{{else status == 'process' }}
+			<span class="label label-primary">В процессе</span>
+		{{else status == 'new'}}
+			<span class="label label-info">Новая</span>
+		{{else status == 'reject'}}
+			<span class="label label-danger">Отклонено</span>
+		{{/if}}
+	</td>
+
+</tr>
+{{/for}}

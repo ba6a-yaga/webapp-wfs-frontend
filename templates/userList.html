@@ -1,0 +1,25 @@
+
+<div class="panel-body no-padding userListItem">
+    <div class="input-group">
+        <form data-action="userSearch"  style="display: contents;">
+        <input class="form-control" type="text" placeholder="Введите номер пользователя" >
+        <span class="input-group-btn"><button class="btn btn-primary" type="submit">Найти</button></span>
+        </form>
+    </div>	
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                {{if ~isMobile()}}
+                <th>Кто</th>
+                {{else}}
+                <th>Кто</th>
+                <th>Баланс</th>
+                {{/if}}
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{include tmpl="#userListItem"/}}
+        </tbody>
+    </table>
+</div>

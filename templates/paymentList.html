@@ -1,0 +1,22 @@
+{{if ~getUser().payments.length }}	
+<table class="table table-striped">
+    <thead>
+        <tr>
+            {{if ~isMobile()}}
+            <th>Информация</th>
+            {{else}}
+            <th>Кто</th>
+            <th>Купил монет</th>
+            <th>в рублях </th>
+            <th>Дата</th>
+            {{/if}}
+            <th>Статус</th>
+        </tr>
+    </thead>
+    <tbody>
+            {{include tmpl="#paymentItem"/}}
+    </tbody>
+</table>
+{{else}}
+<p style="margin-left:20px">Вы не совершили ни одной покупки</p>
+{{/if}}

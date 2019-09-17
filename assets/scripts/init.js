@@ -12,14 +12,21 @@ var originUrl = windowHref.origin+windowHref.pathname;
 if( discount ){
     Cookies.set('discount', discount )
 }
-var tmpl = {
-    login: $.templates("#login"),
-    register: $.templates("#register"),
-    dashboard: $.templates("#dashboard"),
-    userListItem: $.templates("#userListItem"),
-    transactions: $.templates('#transactionItems'),
-    profile: $.templates('#profile')
-}
+
+var tmpl = {};
+$.ajax({
+    async: false,
+    type : 'GET',
+    url : 'templates/',
+    dataType : 'json',
+    cache : false,
+    contentType: "application/json",
+    success : function( data ){           
+        for(key in data){
+            tmpl[key] = $.templates('#'+key, data[key])
+        }
+    },
+});  
 
 $(document).ready(function() {
     init_logs( true );

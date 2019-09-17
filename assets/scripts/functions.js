@@ -40,64 +40,6 @@ function getFormData(form){
 }
 
 
-function makePayment(amount,description){
-    var query = {
-        "amount": {
-          "value": amount,
-          "currency": "RUB"
-        },
-        "capture": true,
-        "confirmation": {
-          "type": "redirect",
-          "return_url": "https://www.wfs.com/"
-        },
-        "description": description
-      };
-
-    $.ajax({
-        type : 'POST',
-        url : 'https://payment.yandex.net/api/v3/payments',
-        dataType : 'json',
-        cache : false,
-        data : query,
-        contentType: "application/json",
-        headers: {
-            'Idempotence-Key' : uuidv4(),
-            '635105': 'test_NjM2Mzk28pZuzy3CkilnQvxwac-HWJFDDRykgOkBhUw'
-        },
-        statusCode: {
-            401: function(response) {
-                logs(response)
-                return true;
-            },
-            422: function(response) {
-                logs(response);
-            }
-        },
-        success : function( data ){           
-            
-            logs(data)
-        },
-
-        error : function ( XMLHttpRequest, textStatus, errorThrown ) {
-
-            console.log(errorThrown)
-            if( textStatus == 'parsererror' ){
-                console.log( XMLHttpRequest.responseText );
-            }
-        
-        }
-    
-    });    
-}
-
-function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  }
-
 function getAjaxData( path, query, callback, type, stamp ){
 
 

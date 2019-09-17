@@ -1,0 +1,20 @@
+{{for ~getUser().listUsers}}
+<tr class="user-{{:_id}}">
+    {{if ~isMobile()}}
+    <td>{{:name}} / {{:phone}}<br>{{:~convertBalance(balance) }} WFS</td>
+    {{else}}
+    <td>{{:name}} / {{:phone}}</td>
+    <td>{{:~convertBalance(balance) }} WFS</td>
+    {{/if}}
+    <td>
+        <a href="#" class="text-warning" data-lockuser="{{:_id}}">
+            {{if lock}}
+            Разблокировать
+            {{else}}
+            Заблокировать
+            {{/if}}
+        </a><br>				
+        <a href="#" class="text-danger" data-rmuser="{{:_id}}">Удалить</a>
+    </td>
+</tr>
+{{/for}}

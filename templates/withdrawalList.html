@@ -1,0 +1,25 @@
+{{if ~getUser().withdrawal.length }}	
+<table class="table table-striped">
+    <thead>
+        <tr>
+            {{if ~isMobile()}}
+            <th>Информация</th>
+            {{else}}
+            {{if ~getUser().role == 'admin' || ~getUser().role == 'masterContract'}}
+            <th>Кто</th>
+            {{/if}}
+            <th>монет</th>
+            <th>в рублях </th>
+            <th>Реквизиты</td>
+            <th>Дата</th>
+            {{/if}}
+            <th>Статус</th>
+        </tr>
+    </thead>
+    <tbody>
+            {{include tmpl="#withdrawalItem"/}}
+    </tbody>
+</table>
+{{else}}
+<p style="margin-left:20px">Вы еще не выводили монеты</p>
+{{/if}}

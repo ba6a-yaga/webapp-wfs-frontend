@@ -1,0 +1,43 @@
+{{for ~getUser().withdrawal}}
+	<tr>
+		{{if ~isMobile()}}
+		<td>
+				{{if ~getUser().role == 'admin' || ~getUser().role == 'masterContract'}}
+				Тел.: {{:userPhone}}<br>
+				{{/if}}
+				Купил монет: {{:~convertBalance(coins) }} WFS<br>
+				В рублях: {{:~convertBalance(amountRubble) }} руб <br>
+				Реквизиты: {{:card }}<br>
+				Дата: {{:~formatDate(updatedAt)}}
+		</td>
+		{{else}}
+		{{if ~getUser().role == 'admin' || ~getUser().role == 'masterContract'}}
+		<td>{{:userPhone}}</td>
+		{{/if}}
+		<td>{{:~convertBalance(coins) }} WFS</td>
+		<td>{{:~convertBalance(amountRubble) }} руб</td>
+		<td>{{:card }}</td>
+		<td>{{:~formatDate(updatedAt)}}</td>
+		{{/if}}
+		<td>
+			{{if ~getUser().role == 'admin' || ~getUser().role == 'masterContract'}}
+				<select class="form-control input-sm" data-action="changeStatusWithdrawal" data-id="{{:_id}}">
+					<option value="new" {{if status == 'new'}}selected{{/if}} >Новая</option>
+					<option value="process"  {{if status == 'process'}}selected{{/if}}>В процессе</option>
+					<option value="reject"  {{if status == 'reject'}}selected{{/if}}>Отклонено</option>
+					<option value="complite"  {{if status == 'complite'}}selected{{/if}}>Выполнено</option>
+				</select>				
+			{{else}}
+				{{if status == 'complite'}}
+					<span class="label label-success">Выполнено</span>
+				{{else status == 'process' }}
+					<span class="label label-primary">В процессе</span>
+				{{else status == 'new'}}
+					<span class="label label-info">Новая</span>				
+				{{else status == 'reject'}}
+					<span class="label label-danger">Отклонено</span>
+				{{/if}}
+			{{/if}}
+		</td>
+	</tr>
+{{/for}}

@@ -1,0 +1,27 @@
+
+{{for ~getUser().payments}}
+<tr>
+    {{if ~isMobile()}}
+    <td>
+            Тел.: {{:userPhone}}<br>
+            Купил монет: {{:~convertBalance(coins) }} WFS<br>
+            В рублях: {{:~convertBalance(payment.amount.value) }} руб <br>
+            Дата: {{:~formatDate(updatedAt)}}
+    </td>
+    {{else}}
+    <td>{{:userPhone}}</td>
+    <td>{{:~convertBalance(coins) }} WFS</td>
+    <td>{{:~convertBalance(payment.amount.value) }} руб</td>
+    <td>{{:~formatDate(updatedAt)}}</td>
+    {{/if}}
+    <td>
+        {{if status == 'complite'}}
+            <span class="label label-success">Выполнено</span>
+        {{else status == 'process' }}
+            <span class="label label-primary">В процессе</span>
+        {{else status == 'reject'}}
+            <span class="label label-danger">Отклонено</span>
+        {{/if}}
+    </td>
+</tr>
+{{/for}}

@@ -1,0 +1,134 @@
+<!-- NAVBAR -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="brand">
+        <a href="index.html"><img src="assets/img/wfs-min.png" alt="World Free System" class="img-responsive logo"></a>
+        
+    </div>
+
+    <div class="balance" >
+        <span class="text-primary">Баланс: <span class="text-success">{{:~getUser().balance}} WFS</span></span>
+    </div>
+
+    <div class="container-fluid">
+
+        <div id="navbar-menu">
+            <ul class="nav navbar-nav navbar-right">
+                <li >
+                    <span class="text-primary">Привет <a href="#" data-action="profile" style="text-decoration:underline">{{:~getUser().name}}</a>!</span>
+                </li>
+                <li><a href="#" data-action="logout" > <span>Выйти </span></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- END NAVBAR -->
+
+<!-- MAIN -->
+<div class="main">
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <!-- OVERVIEW -->
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="panel">
+                        <div class="custom-tabs-line tabs-line-bottom left-aligned">
+                            <ul class="nav" role="tablist">
+                                <li class="active"><a href="#tab-bottom-left1" role="tab" data-toggle="tab">Отправить</a></li>
+                                {{if ~getUser().role != 'masterContract' && ~getUser().role != 'admin'}}
+                                <li><a href="#tab-bottom-left2" role="tab" data-toggle="tab">Купить</a></li>
+                                <li><a href="#tab-bottom-left3" role="tab" data-toggle="tab">Продать</a></li>
+                                {{/if}}
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active" id="tab-bottom-left1">
+                                {{include tmpl="#sendCoin"/}}
+                            </div>
+                            {{if ~getUser().role != 'masterContract' && ~getUser().role != 'admin'}}
+                            <div class="tab-pane fade" id="tab-bottom-left2">
+                                {{include tmpl="#buyCoin"/}}
+                            </div>
+                            <div class="tab-pane fade" id="tab-bottom-left3">
+                                    {{include tmpl="#sellCoin"/}}
+                            </div>								
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END OVERVIEW -->
+
+            {{if ~getUser().transactions.length || ~getUser().payments.length || ~getUser().withdrawal.length }}
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- RECENT PURCHASES -->
+                    <div class="panel">
+
+                        <div class="custom-tabs-line tabs-line-bottom left-aligned">
+                            <ul class="nav" role="tablist">
+                                {{if ~getUser().transactions.length }}
+                                <li class="active"><a href="#tab-transaction-left1" role="tab" data-toggle="tab">Транзакции</a></li>									
+                                {{/if}}
+                                {{if ~getUser().payments.length }}
+                                <li><a href="#tab-transaction-left2" role="tab" data-toggle="tab">Оплаты</a></li>
+                                {{/if}}
+                                {{if ~getUser().withdrawal.length }}
+                                <li><a href="#tab-transaction-left3" role="tab" data-toggle="tab">Вывод</a></li>
+                                {{/if}}									
+
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            {{if ~getUser().transactions.length }}
+                            <div class="tab-pane fade in active" id="tab-transaction-left1">
+                                {{include tmpl="#transactionList"/}}
+                            </div>
+                            {{/if}}
+                            {{if ~getUser().payments.length}}
+                            <div class="tab-pane fade" id="tab-transaction-left2">
+                                {{include tmpl="#paymentList"/}}
+                            </div>
+                            {{/if}}
+                            {{if ~getUser().withdrawal.length}}
+                            <div class="tab-pane fade" id="tab-transaction-left3">
+                                {{include tmpl="#withdrawalList"/}}
+                            </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                    <!-- END RECENT PURCHASES -->
+                </div>
+            </div>
+            {{/if}}
+            {{if ~getUser().role == 'masterContract' && ~getUser().role != 'admin'}}
+            <div class="row" id="userList">
+                    <div class="col-md-12">
+                        <!-- RECENT PURCHASES -->
+                        <div class="panel">
+
+                            <div class="custom-tabs-line tabs-line-bottom left-aligned">
+                                <ul class="nav" role="tablist">
+                                    <li class="active"><a href="#tab-users-left1" role="tab" data-toggle="tab">Пользователи</a></li>									
+                                    <li><a href="#tab-users-left2" role="tab" data-toggle="tab">Добавить пользователя</a></li>
+                                </ul>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane fade in active" id="tab-users-left1">
+                                    {{include tmpl="#userList"/}}
+                                </div>
+                                <div class="tab-pane fade" id="tab-users-left2">
+                                    {{include tmpl="#addUser"/}}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END RECENT PURCHASES -->
+                    </div>
+            </div>
+            {{/if}}
+
+        </div>
+    </div>
+    <!-- END MAIN CONTENT -->
+</div>

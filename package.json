@@ -1,0 +1,23 @@
+{
+  "name": "wfs_front",
+  "version": "1.0.0",
+  "description": "Js frontend ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darkrain/WFS_front.git"
+  },
+  "author": "Borg.Systems",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/darkrain/WFS_front/issues"
+  },
+  "homepage": "https://github.com/darkrain/WFS_front#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "glob": "^7.1.4"
+  }
+}

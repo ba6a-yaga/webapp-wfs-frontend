@@ -1,0 +1,22 @@
+{{if ~getUser().transactions.length }}	
+<table class="table table-striped">
+	<thead>
+		<tr>
+			{{if ~isMobile()}}
+			<th>Кому</th>
+			<th>Статус</th>
+			{{else}}
+			<th>Кому</th>
+			<th>Сколько</th>
+			<th>Дата &amp; Время</th>
+			<th>Статус</th>
+			{{/if}}
+		</tr>
+	</thead>
+	<tbody>
+		{{include tmpl="#transactionItems"/}}
+	</tbody>
+</table>
+{{else}}
+	<p style="margin-left:20px">Вы пока еще не совершили ни одной транзакции</p>
+{{/if}}
