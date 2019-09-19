@@ -28,7 +28,25 @@ function isMobile(){
     return isMobile;
 }
 
-$.views.helpers({isMobile: isMobile, getUser:getUser,formatDate:formatDate, convertBalance:convertBalance, isMe: isMe, getDiscount: getDiscount });
+function activeTabs(){
+    setTimeout(function(){
+        $('body .nav li:first a').click()
+    },100)
+    
+}
+
+
+$.views.helpers({activeTabs: activeTabs, isMobile: isMobile, getUser:getUser,formatDate:formatDate, convertBalance:convertBalance, isMe: isMe, getDiscount: getDiscount, round: Math.round });
+
+function reloadDashboard(){
+    getAjaxData('/users/current',{},function(response){
+        window.UserData = response.user;
+        $('#wrapper').html(tmpl.dashboard.render())    
+        $('body')
+            .addClass('layout-fullwidth')
+    },'GET', 'Reload Dashboard', false);
+    
+}
 
 function getFormData(form){
     var data = {};
@@ -40,7 +58,7 @@ function getFormData(form){
 }
 
 
-function getAjaxData( path, query, callback, type, stamp ){
+function getAjaxData( path, query, callback, type, stamp, async = true ){
 
 
     if( !isset( type ) )
@@ -59,7 +77,7 @@ function getAjaxData( path, query, callback, type, stamp ){
     }
 
     $.ajax({
-        async: true,
+        async: async,
         type : type,
         url : urlApi+path,
         dataType : 'json',

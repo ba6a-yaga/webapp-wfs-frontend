@@ -14,19 +14,16 @@
             <input name="role" value="admin" type="radio">
             <span><i></i>Админ</span>
         </label>
-        <p>Скидка на покупку монет:</p>			
+        <div class="refPercent">
+        <p>Реферальный процент:</p>
+        {{for ~getUser().percentData  }}			
         <label class="fancy-radio">
-            <input name="discount" value="default" type="radio" checked="checked">
-            <span><i></i>3%</span>
+            <input name="refPercent" value="{{:value}}" type="radio" {{if #index == 0}} checked="checked"{{/if}}>
+            <span><i></i>{{:name}}%</span>
         </label>
-        <label class="fancy-radio">
-            <input name="discount" value="gold" type="radio">
-            <span><i></i>7%</span>
-        </label>
-        <label class="fancy-radio">
-            <input name="discount" value="platinum" type="radio">
-            <span><i></i>10%</span>
-        </label>							
+        {{/for}}
+        </div>
+						
     </div>
     <div class="input-group">
         <span class="input-group-addon">+7</span>

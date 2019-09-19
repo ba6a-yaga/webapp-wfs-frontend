@@ -3,14 +3,16 @@
 <tr>
     {{if ~isMobile()}}
     <td>
+            {{if ~getUser().role != 'user' }}	
             Тел.: {{:userPhone}}<br>
-            Купил монет: {{:~convertBalance(coins) }} WFS<br>
+            {{/if}}
             В рублях: {{:~convertBalance(payment.amount.value) }} руб <br>
             Дата: {{:~formatDate(updatedAt)}}
     </td>
     {{else}}
+    {{if ~getUser().role != 'user' }}
     <td>{{:userPhone}}</td>
-    <td>{{:~convertBalance(coins) }} WFS</td>
+    {{/if}}
     <td>{{:~convertBalance(payment.amount.value) }} руб</td>
     <td>{{:~formatDate(updatedAt)}}</td>
     {{/if}}

@@ -4,9 +4,18 @@ $(document).ready(function() {
 
     $('body').on('click', '[data-action="dashboard"]', function(e){
         e.preventDefault();
-        $('#wrapper').html(tmpl.dashboard.render())
+        reloadDashboard()
+       
     })
 
+    
+    $('body').on('click', '[data-toggle]', function(e){
+        e.preventDefault();
+
+        var id = $(this).attr('data-toggle');
+        $("#"+id).toggle()
+        
+    })
 
     // profile
 
@@ -68,6 +77,7 @@ $(document).ready(function() {
                 setTimeout(function(){
                     form.find('.alert-success').hide()
                 },5000)    
+                reloadDashboard()
             }else{
                 form.find('.alert-danger').text(response.textErr).show()
             }
@@ -100,21 +110,24 @@ $(document).ready(function() {
     $('body').on('keyup', '[name="tokensAmount"]', function(e){
         e.preventDefault();
         var tokensAmount = $(this).val();
-        var parent = $(this).parents('.panel-body')
+        var parent = $(this).parents('form')
         $('[name="amountRuble"]',parent).val(Number(tokensAmount*UserData.tokenPrice).toFixed(0))
     })        
 
     $('body').on('keyup', '[name="amountRuble"]', function(e){
         e.preventDefault();
         var amountRuble = $(this).val();
-        var parent = $(this).parents('.panel-body')
+        var parent = $(this).parents('form')
         $('[name="tokensAmount"]', parent).val(Number(amountRuble/UserData.tokenPrice).toFixed(0))
     })       
     
 
-    $('body').on('click','#buyCoin .btn-success', function(e){
+    $('body').on('click','#replenishBalance .btn-success', function(e){
         e.preventDefault();
-        var amountRuble = $('[name="amountRuble"]').val();
+        var parent = $(this).parents('#replenishBalance');
+        var amountRuble = $('[name="amount"]',parent).val();
+
+        console.log(amountRuble)
         getAjaxData('/payments',{input:{amount:amountRuble, url:originUrl }}, function(response){
             if( response.status == 'success' ){
                 window.location.replace(response.redirectUrl)
@@ -125,11 +138,11 @@ $(document).ready(function() {
     })
     // buy tokens end
 
-    $('body').on('click','#sellCoin .btn-success', function(e){
+    $('body').on('click','#withdraw .btn-success', function(e){
         e.preventDefault();
 
-        var parent = $(this).parents('#sellCoin')
-        var amountRuble = $('[name="amountRuble"]', parent).val();
+        var parent = $(this).parents('#withdraw')
+        var amountRuble = $('[name="amount"]', parent).val();
         $('button[type="submit"]', parent).attr("disabled", true);
         $('button[type="submit"] i', parent).removeClass('d-none')
 
@@ -152,11 +165,12 @@ $(document).ready(function() {
         var status = $(this).val();
         var id = $(this).attr('data-id');
         var text = $(':selected',this).text()
+        var el = $(this)
 
         if(confirm('Вы уверены что хотите изменить статус на '+text)){
             getAjaxData('/withdrawal',{input:{id:id,status:status}}, function(response){
                 if( response.status == 'success' ){
-                    
+                    el.replaceWith('<span class="label label-success">Выполнено</span>')
                 }else(
                     alert(response.textErr)
                 )
@@ -169,13 +183,26 @@ $(document).ready(function() {
     if(successPayment){
         getAjaxData('/payments/success',{input:{uuid:successPayment}}, function(response){
             if( response.status == 'success' ){
-                $('#wrapper').html(tmpl.dashboard.render())  
+                reloadDashboard()
             }else(
                 alert(response.textErr)
             )
         },'POST','createPayment')        
     }
 
+
+    
+
+    $('body').on('change','form [name="role"]',function(e){
+
+        var parent = $(this).parents('form') 
+
+        if( $(this).val() == 'admin'){
+            $('.refPercent', parent).hide()
+        }else{
+            $('.refPercent', parent).show()
+        }
+    })
 
     // Search users
     $('body').on('submit', 'form[data-action="userSearch"]', function(e){
@@ -266,6 +293,24 @@ $(document).ready(function() {
             }
         }
 
+        var buyTokens = function(response){
+            if( response.status == 'success' ){
+
+                form.find('.alert-success').show()
+                form.find('.alert-danger').hide()
+                
+                setTimeout(function(){
+                    form.find('.alert-success').hide()
+                    reloadDashboard()
+                },5000)
+
+
+                
+            }else{
+                form.find('.alert-danger').text(response.textErr).show()
+            }           
+        }
+
         var login = function(response){
             if( response.status == 'success' ){
                 window.UserData = response.user;
@@ -297,6 +342,9 @@ $(document).ready(function() {
 
             if( form.attr('action') == '/transactions/transfer' )
                 transfer(response)
+
+            if( form.attr('action') == '/transactions/buyTokens' )
+                buyTokens(response)
             
             if( form.attr('action') == '/users' )
                 register(response)                
@@ -305,6 +353,19 @@ $(document).ready(function() {
         return false;
     })
 
+
+    $('body').on('change','[data-refPercent]', function(e){
+        var percent = $(':selected',this).val()
+        var isUpdate = confirm("Вы точно изменить процент пользователя?");
+        var userid = $(this).attr('data-refPercent');
+
+        if( isUpdate )
+            getAjaxData('/users/refPercent/'+userid,{input:{refPercent:percent}}, function(response){
+                if(response.status == 'failed'){
+                    alert(response.textErr)
+                }
+            },'PUT','Update refpercent user')
+    })
 
     // delete user
     $('body').on('click', '[data-rmuser]',function(e){

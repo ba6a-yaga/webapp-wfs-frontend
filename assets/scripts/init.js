@@ -14,34 +14,41 @@ if( discount ){
 }
 
 var tmpl = {};
-$.ajax({
-    async: false,
-    type : 'GET',
-    url : 'templates/',
-    dataType : 'json',
-    cache : false,
-    contentType: "application/json",
-    success : function( data ){           
-        for(key in data){
-            tmpl[key] = $.templates('#'+key, data[key])
-        }
-    },
-});  
+
 
 $(document).ready(function() {
     init_logs( true );
 
-    getAjaxData('/users/current',{},function(response){
-        if( response == 'Unauthorized'){
-            $('#wrapper').html(tmpl.login.render())
-        }else{
-            window.UserData = response.user;
-            $('#wrapper').html(tmpl.dashboard.render())            
-        }
+    $.ajax({
+        async: false,
+        type : 'GET',
+        url : 'templates/',
+        dataType : 'json',
+        cache : false,
+        contentType: "application/json",
+        success : function( data ){           
+            for(key in data){
+                tmpl[key] = $.templates('#'+key, data[key])
+            }
 
-        $('body')
-            .removeClass('ajaxloader')
-            .addClass('layout-fullwidth')
-    },'GET', 'Get current');
+            getAjaxData('/users/current',{},function(response){
+                if( response == 'Unauthorized'){
+                    $('#wrapper').html(tmpl.login.render())
+                }else{
+                    window.UserData = response.user;
+
+                    $('#wrapper').html(tmpl.dashboard.render())    
+                    
+                }
+        
+                $('body')
+                    .removeClass('ajaxloader')
+                    .addClass('layout-fullwidth')
+            },'GET', 'Get current', false);
+
+        },
+    });  
+
+
 
 })

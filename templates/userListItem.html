@@ -1,12 +1,19 @@
-{{for ~getUser().listUsers}}
+{{for ~getUser().listUsers itemVar='~user'}}
 <tr class="user-{{:_id}}">
     {{if ~isMobile()}}
     <td>{{:name}} / {{:phone}}<br>{{:~convertBalance(balance) }} WFS</td>
     {{else}}
     <td>{{:name}} / {{:phone}}</td>
-    <td>{{:~convertBalance(balance) }} WFS</td>
+    <td>{{:~convertBalance(balance) }} WFS {{if role == 'user'}}<br> {{:~convertBalance(RURbalance) }} руб {{/if}} <br></td>
     {{/if}}
-    <td>
+    <td>   
+        {{if role == 'user'}}     
+        <select class="form-control input-sm" data-refPercent="{{:_id}}">
+            {{for ~getUser().percentData  }}
+            <option value="{{:value}}"  {{if value == ~user.refPercent }}selected{{/if}}>{{:name}}%</option>
+            {{/for}}
+        </select>
+        {{/if}}
         <a href="#" class="text-warning" data-lockuser="{{:_id}}">
             {{if lock}}
             Разблокировать

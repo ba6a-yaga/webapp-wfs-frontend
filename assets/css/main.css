@@ -84,14 +84,9 @@ footer {
   max-width: 1024px;
   background-color: #f5f5fa; }
 
-#wrapper #sidebar-nav,
-#wrapper .main {
-  padding-top: 80px; }
 
-@media screen and (max-width: 767px) {
-  #wrapper #sidebar-nav,
-  #wrapper .main {
-    padding-top: 130px; } }
+
+
 
 .layout-fullwidth #wrapper .sidebar {
   left: -260px; }
@@ -1162,7 +1157,7 @@ ul.activity-list > li {
   float: left;
   width: 35%;
   height: 100%;
-  position: absolute;
+  /*position: absolute;*/
   background-color: #F8F8F8; }
 
 .profile-right {
@@ -1205,6 +1200,8 @@ ul.activity-list > li {
   .profile-header .online-status {
     font-size: 13px;
     position: relative;
+    color:#fff;
+    text-decoration: underline;
     top: -2px; }
     .profile-header .online-status:before {
       -webkit-border-radius: 50%;
@@ -1225,6 +1222,7 @@ ul.activity-list > li {
     position: relative;
     background-color: #00AAFF; }
     .profile-header .profile-stat .stat-item {
+      font-size: 16pt;
       padding: 20px;
       position: relative; }
       .profile-header .profile-stat .stat-item:after {

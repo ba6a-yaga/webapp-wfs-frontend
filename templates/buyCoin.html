@@ -1,6 +1,10 @@
-<div id="buyCoin">
-    <div class="panel-body" >
-        
+<div id="buyCoin" class="d-none">
+    <form action="/transactions/buyTokens" data-form="true">
+        <p class="text-success">Текущий курс: {{:~getUser().tokenPrice}}</p>
+        <div class="alert alert-success alert-dismissible d-none" role="alert">
+                <i class="fa fa-check-circle"></i> Монеты отправлены!
+        </div>
+        <div class="alert alert-danger alert-dismissible d-none" role="alert"></div>
         <div class="input-group">
             <span class="input-group-addon">WFS</span>
             <input class="form-control" type="text" name="tokensAmount">
@@ -8,21 +12,14 @@
         </div>
         <br>
         <div class="input-group">
-            <span class="input-group-addon">В рублях</span>
+            <span class="input-group-addon">руб</span>
             <input class="form-control" type="text" name="amountRuble">
             <span class="input-group-addon">.00</span>
-        </div>	
-
-    </div>
-    <div class="panel-footer">
-        <div class="row">
-            <div class="col-md-6"><span class=" text-success">Цена одной монеты: {{:~getUser().tokenPrice}} руб</span></div>
-            <div class="col-md-6 text-right">
-                <button type="submit" class="btn btn-success ">
-                    <i class="fa fa-spinner fa-spin d-none"></i>
-                    Купить
-                </button>
-            </div>
         </div>
-    </div>
+        <br>
+        <button type="submit" class="btn btn-success ">
+                <i class="fa fa-spinner fa-spin d-none"></i>
+                Купить
+        </button><br>             
+    </form>
 </div>
