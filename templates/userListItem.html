@@ -13,6 +13,15 @@
             <option value="{{:value}}"  {{if value == ~user.refPercent }}selected{{/if}}>{{:name}}%</option>
             {{/for}}
         </select>
+        <select class="form-control input-sm" data-friendsCount="{{:_id}}">
+            <option {{if ~user.friendsCount == 10}} selected {{/if}} value="10">10</option>
+            <option {{if ~user.friendsCount == 20}} selected {{/if}} value="20">20</option>
+            <option {{if ~user.friendsCount == 30}} selected {{/if}} value="30">30</option>
+            <option {{if ~user.friendsCount == 40}} selected {{/if}} value="40">40</option>
+            <option {{if ~user.friendsCount == 50}} selected {{/if}} value="50">50</option>
+        </select>
+
+      
         {{/if}}
         <a href="#" class="text-warning" data-lockuser="{{:_id}}">
             {{if lock}}

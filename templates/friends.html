@@ -1,0 +1,55 @@
+<h4 class="heading" {{if ~isMobile()}} style="padding-left:20px"{{/if}} >Использовано {{:~getUser().userRelations.count}} из {{:~getUser().friendsCount}} приглашений</h4>
+<!-- AWARDS -->
+<div class="awards">
+
+        {{if ~getUser().userRelations.friends}}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        {{if ~isMobile()}}
+                        <th>Кто</th>
+                        <th>Доход</th>
+                        {{else}}
+                        <th>Имя</th>
+                        <th>Телефон</th>
+                        <th>Доход за период руб.</th>
+                        {{/if}}
+                    </tr>
+                </thead>
+                <tbody>
+                    {{if ~getUser().userRelations.friends.length == 0 && ~getUser().userRelations.invites.length == 0}}
+                        <tr>
+                            <td colspan="3" align="center">Вы пока еще ни кого не пригласили</td>
+                        </tr>                    
+                    {{else}}
+                        {{for ~getUser().userRelations.friends}}
+                            <tr>
+                                {{if ~isMobile()}}
+                                <td>{{:name}} / +7{{:phone}}</td>
+                                <td>{{:amountSum}}</td>
+                                {{else}}
+                                <td>{{:name}}</td>
+                                <td>+7{{:phone}}</td>
+                                <td>{{:amountSum}}</td>
+                                {{/if}}
+                            </tr>
+                        {{/for}}
+                        {{for ~getUser().userRelations.invites}}
+                            <tr>
+                                <td {{if ~isMobile()}} colspan="2" {{else}} colspan="3" {{/if}} align="center"><a href="{{:~home()}}?uuid={{:uuid}}" target="_blank">Ссылка для регистрации</a></td>
+                            </tr>
+                        {{/for}} 
+                    {{/if}}                   
+                </tbody>
+            </table>
+        {{else}}
+            <p class="text-center"> Еще нет ни одного приведеного друга</p>
+        {{/if}}
+
+
+    
+    
+    <div  {{if ~isMobile()}}class="text-center" {{else}}class="text-right"{{/if}}> 
+        <a href="#" class="btn btn-success" data-action="createFriendLink">Добавить</a>
+    </div>
+</div>

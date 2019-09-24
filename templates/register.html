@@ -8,6 +8,7 @@
                     </div>
                     <form class="form-auth-small" action="/users"  data-form="true">
                         <input type="hidden" name="discount" value="{{:~getDiscount()}}">
+                        <input type="hidden" name="uuid" value="{{:~getLinkParam('uuid')}}">
                         <div class="alert alert-danger alert-dismissible d-none" role="alert"></div>
                         <div class="form-group">
                             <label for="name" class="control-label sr-only">Имя</label>

@@ -26,6 +26,21 @@ $(document).ready(function() {
     })
 
 
+    $('body').on('click', '[data-action="createFriendLink"]', function(e){
+        e.preventDefault();
+        getAjaxData('/users/createFriendLink',{},function(response){
+
+            if( response.status == 'success'){
+                loadUserData()
+                $("#friends").html(tmpl.friends.render())
+            }else{
+                alert(response.textErr)
+            }
+
+        },'POST','createFriendLink')
+    })
+
+
     $('body').on('click', '[data-action="getprivatekey"]', function(e){
         e.preventDefault();
         password = prompt('Подтверждение', 'Введите пароль');
@@ -315,7 +330,7 @@ $(document).ready(function() {
             if( response.status == 'success' ){
                 window.UserData = response.user;
                 Cookies.set('Auth', response.user.token);
-                $('#wrapper').html(tmpl.dashboard.render())   
+                window.location.replace(originUrl)  
             }else{
                 form.find('.alert-danger').text(response.textErr).show()
             }
@@ -366,6 +381,21 @@ $(document).ready(function() {
                 }
             },'PUT','Update refpercent user')
     })
+
+
+
+    $('body').on('change','[data-friendsCount]', function(e){
+        var percent = $(':selected',this).val()
+        var isUpdate = confirm("Вы точно изменить кол-во приглашений пользователя?");
+        var userid = $(this).attr('data-friendsCount');
+
+        if( isUpdate )
+            getAjaxData('/users/friendsCount/'+userid,{input:{friendsCount:percent}}, function(response){
+                if(response.status == 'failed'){
+                    alert(response.textErr)
+                }
+            },'PUT','Update friendsCount user')
+    })    
 
     // delete user
     $('body').on('click', '[data-rmuser]',function(e){

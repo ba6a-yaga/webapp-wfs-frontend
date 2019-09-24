@@ -1171,7 +1171,11 @@ ul.activity-list > li {
   .profile-left,
   .profile-right {
     float: none;
-    width: 100%; }
+    width: 100%; padding:0px; }
+
+    .profile-right .tab-pane, .tab-pane-tables {padding:0px; }
+  
+  .custom-tabs-line.tabs-line-bottom a {font-size: 12px;}
   .profile-left {
     position: relative;
     margin-bottom: 30px; } }
@@ -1698,28 +1702,8 @@ ul.activity-list > li {
 .hexagon {
   width: 100px;
   height: 55px;
-  background: #ececec;
   position: relative; }
-  .hexagon:before {
-    content: "";
-    position: absolute;
-    top: -25px;
-    left: 0;
-    width: 0;
-    height: 0;
-    border-left: 50px solid transparent;
-    border-right: 50px solid transparent;
-    border-bottom: 25px solid #ececec; }
-  .hexagon:after {
-    content: "";
-    position: absolute;
-    bottom: -25px;
-    left: 0;
-    width: 0;
-    height: 0;
-    border-left: 50px solid transparent;
-    border-right: 50px solid transparent;
-    border-top: 25px solid #ececec; }
+
 
 .award-icon {
   font-size: 36px;
@@ -1793,3 +1777,4 @@ ul.activity-timeline > li {
 .d-none {display: none}
 .d-block {display: block}
 .d-iblick {display: inline-block}
+.link-addfriend {margin-top: 10px; display: inline-block}

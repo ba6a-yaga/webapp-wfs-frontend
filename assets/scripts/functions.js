@@ -36,7 +36,22 @@ function activeTabs(){
 }
 
 
-$.views.helpers({activeTabs: activeTabs, isMobile: isMobile, getUser:getUser,formatDate:formatDate, convertBalance:convertBalance, isMe: isMe, getDiscount: getDiscount, round: Math.round });
+function getLinkParam(param){
+    return windowHref.searchParams.get(param)
+}
+
+function sumArray(array){
+    if(array.length)
+        return array.reduce(function(accumulator, currentValue){return accumulator + currentValue})
+    else
+        return 0;
+}
+
+
+function home(){
+    return originUrl;
+}
+$.views.helpers({home: home, sumArray: sumArray, getLinkParam: getLinkParam, activeTabs: activeTabs, isMobile: isMobile, getUser:getUser,formatDate:formatDate, convertBalance:convertBalance, isMe: isMe, getDiscount: getDiscount, round: Math.round });
 
 function reloadDashboard(){
     getAjaxData('/users/current',{},function(response){
@@ -47,6 +62,16 @@ function reloadDashboard(){
     },'GET', 'Reload Dashboard', false);
     
 }
+
+
+function loadUserData(){
+    getAjaxData('/users/current',{},function(response){
+        window.UserData = response.user;
+
+    },'GET', 'loadUserData', false);
+    
+}
+
 
 function getFormData(form){
     var data = {};
@@ -103,13 +128,18 @@ function getAjaxData( path, query, callback, type, stamp, async = true ){
 
         error : function ( XMLHttpRequest, textStatus, errorThrown ) {
 
-            callback(errorThrown)
             if( textStatus == 'parsererror' ){
                 console.log( XMLHttpRequest.responseText );
             }
         
         }
     
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR.statusText.indexOf('NetworkError'))
+        if(jqXHR.statusText.indexOf('NetworkError') >= 0){
+            alert('Server is down')
+        }
     });
 
 }

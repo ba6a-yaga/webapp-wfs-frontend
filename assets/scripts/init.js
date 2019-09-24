@@ -31,20 +31,32 @@ $(document).ready(function() {
                 tmpl[key] = $.templates('#'+key, data[key])
             }
 
-            getAjaxData('/users/current',{},function(response){
-                if( response == 'Unauthorized'){
-                    $('#wrapper').html(tmpl.login.render())
-                }else{
-                    window.UserData = response.user;
+            if( windowHref.searchParams.get("uuid") ){
+                $('#wrapper').html(tmpl.register.render())
+                return true;
+            }
 
-                    $('#wrapper').html(tmpl.dashboard.render())    
-                    
-                }
-        
-                $('body')
-                    .removeClass('ajaxloader')
-                    .addClass('layout-fullwidth')
-            },'GET', 'Get current', false);
+
+            if( Cookies.get('Auth') )
+                getAjaxData('/users/current',{},function(response){
+                    if( response == 'Unauthorized'){
+                        $('#wrapper').html(tmpl.login.render())
+                    }else if (response.status == 'success' ){
+                        window.UserData = response.user;
+
+                        $('#wrapper').html(tmpl.dashboard.render())    
+                        
+                    }else{
+                        if( response.code == 'user_not_found')
+                        $('#wrapper').html(tmpl.login.render())  
+                    }
+            
+                    $('body')
+                        .removeClass('ajaxloader')
+                        .addClass('layout-fullwidth')
+                },'GET', 'Get current', false);
+            else
+                $('#wrapper').html(tmpl.login.render()) 
 
         },
     });  
