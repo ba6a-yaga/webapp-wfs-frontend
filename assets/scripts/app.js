@@ -212,17 +212,6 @@ $(document).ready(function() {
 
     })
 
-    var successPayment = windowHref.searchParams.get("successPayment");
-    if(successPayment){
-        getAjaxData('/payments/success',{input:{uuid:successPayment}}, function(response){
-            if( response.status == 'success' ){
-                reloadDashboard()
-            }else(
-                alert(response.textErr)
-            )
-        },'POST','createPayment')        
-    }
-
 
     
 
