@@ -9,11 +9,13 @@ function getUser(){
 
 function formatDate(dateString){
     var date = new Date(dateString);
-    return  date.getDate() + "-" + date.getMonth() + "-"+date.getFullYear()+" " + date.getHours() + ":" + date.getMinutes();
+    if(isNaN(date) )
+    return "";
+    return  date.getDate() + "-" + date.getMonth() + "-"+date.getFullYear();
 }
 
 function convertBalance(balance){
-    return Number(balance).toLocaleString('ru-RU')
+    return Number(balance).toFixed(2)
 }
 
 function isMe(phone){
@@ -51,7 +53,11 @@ function sumArray(array){
 function home(){
     return originUrl;
 }
-$.views.helpers({home: home, sumArray: sumArray, getLinkParam: getLinkParam, activeTabs: activeTabs, isMobile: isMobile, getUser:getUser,formatDate:formatDate, convertBalance:convertBalance, isMe: isMe, getDiscount: getDiscount, round: Math.round });
+
+function hideCard(card){
+    return card.replace(/\d(?=\d{4})/g, "*");
+}
+$.views.helpers({hideCard: hideCard, home: home, sumArray: sumArray, getLinkParam: getLinkParam, activeTabs: activeTabs, isMobile: isMobile, getUser:getUser,formatDate:formatDate, convertBalance:convertBalance, isMe: isMe, getDiscount: getDiscount, round: Math.round });
 
 function reloadDashboard(){
     getAjaxData('/users/current',{},function(response){

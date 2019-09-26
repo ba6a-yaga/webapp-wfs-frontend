@@ -1,0 +1,11 @@
+{{for ~getUser().refpayments}}
+	<tr>
+        {{if ~isMobile() }}
+                <td>{{:name}} / {{:phone}}</br>{{:~formatDate(date)}}</td>
+        {{else}}
+                <td>{{:name}} / {{:phone}}</td>
+                <td>{{:~formatDate(date)}}</td>
+        {{/if}}
+        <td>{{:amount}} руб</td>
+	</tr>
+{{/for}}

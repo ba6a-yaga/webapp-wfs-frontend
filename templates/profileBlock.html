@@ -41,7 +41,7 @@
                                 {{/if}}
                                 <li><a href="#" data-action="getprivatekey">Получить приватный ключ</a></li>
                             </ul>
-                            <input type="input" name="mnemonic" id="mnemonic" class="form-control d-none" disabled value="">
+                            <input type="input" name="mnemonic" id="mnemonic" style="margin-bottom:15px" class="form-control d-none" disabled value="">
                             <div class="text-center"><a href="#" class="btn btn-primary" data-action="profile">Редактировать профиль</a></div>
                         </div>
                         <hr>
@@ -83,7 +83,7 @@
                     {{/if}}
                     <!-- END AWARDS -->
                     <!-- TABBED CONTENT -->
-                    {{if ~getUser().transactions.length || ~getUser().payments.length || ~getUser().withdrawal.length }}
+                    {{if ~getUser().transactions.length || ~getUser().payments.length || ~getUser().withdrawal.length || ~getUser().refpayments.length }}
                         <div class="custom-tabs-line tabs-line-bottom left-aligned">
                             <ul class="nav" role="tablist">
                                 {{if ~getUser().transactions.length }}
@@ -95,6 +95,9 @@
                                 {{if ~getUser().withdrawal.length }}
                                 <li><a href="#tab-transaction-left3" role="tab" data-toggle="tab">Вывод</a></li>
                                 {{/if}}									
+                                {{if ~getUser().refpayments.length }}
+                                <li><a href="#tab-transaction-left4" role="tab" data-toggle="tab">Выплаты</a></li>
+                                {{/if}}	                                
 
                             </ul>
                         </div>
@@ -114,6 +117,11 @@
                                 {{include tmpl="#withdrawalList"/}}
                             </div>
                             {{/if}}
+                            {{if ~getUser().refpayments.length}}
+                            <div class="tab-pane fade" id="tab-transaction-left4">
+                                {{include tmpl="#refpaymentsList"/}}
+                            </div>
+                            {{/if}}                            
                         </div>
                     {{else}}
                     <h3 class="heading" {{if ~isMobile()}} style="padding-left:20px"{{/if}}>Здесь будет скоро информация, пока просто нет данных</h2>

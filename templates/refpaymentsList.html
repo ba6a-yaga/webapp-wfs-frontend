@@ -1,0 +1,21 @@
+{{if ~getUser().refpayments.length }}	
+<table class="table table-striped">
+    <thead>
+        <tr>
+            {{if ~isMobile()}}
+                <th>От кого</th>
+            {{else}}
+
+                <th>От кого</th>
+                <th>Дата</th>
+            {{/if}}
+            <th>Сумма</th>
+        </tr>
+    </thead>
+    <tbody>
+            {{include tmpl="#refpaymentsItem"/}}
+    </tbody>
+</table>
+{{else}}
+<p style="margin-left:20px">Выплат еще нет</p>
+{{/if}}

@@ -5,11 +5,12 @@
             {{if ~isMobile()}}
             <th>Информация</th>
             {{else}}
-            {{if ~getUser().role != 'user' }}	
-            <th>Кто</th>
-            {{/if}}
-            <th>Сумма </th>
-            <th>Дата</th>
+                {{if ~getUser().role != 'user' }}	
+                <th>Кто</th>
+                {{/if}}
+                <th>Сумма </th>
+                <th>Тип оплаты </th>
+                <th>Дата</th>
             {{/if}}
             <th>Статус</th>
         </tr>

@@ -43,7 +43,7 @@ $(document).ready(function() {
 
     $('body').on('click', '[data-action="getprivatekey"]', function(e){
         e.preventDefault();
-        password = prompt('Подтверждение', 'Введите пароль');
+        password = prompt('Введите пароль');
         var clickLink = $(this)
 
         if(password == null)
@@ -126,28 +126,43 @@ $(document).ready(function() {
         e.preventDefault();
         var tokensAmount = $(this).val();
         var parent = $(this).parents('form')
-        $('[name="amountRuble"]',parent).val(Number(tokensAmount*UserData.tokenPrice).toFixed(0))
+        $('[name="amountRuble"]',parent).val(Number(tokensAmount*UserData.tokenPrice).toFixed(2))
     })        
 
     $('body').on('keyup', '[name="amountRuble"]', function(e){
         e.preventDefault();
         var amountRuble = $(this).val();
         var parent = $(this).parents('form')
-        $('[name="tokensAmount"]', parent).val(Number(amountRuble/UserData.tokenPrice).toFixed(0))
+        $('[name="tokensAmount"]', parent).val(Number(amountRuble/UserData.tokenPrice).toFixed(2))
     })       
     
 
     $('body').on('click','#replenishBalance .btn-success', function(e){
         e.preventDefault();
         var parent = $(this).parents('#replenishBalance');
-        var amountRuble = $('[name="amount"]',parent).val();
+        var amountRuble = Number($('[name="amount"]',parent).val()).toFixed(2);
+        var type = $('[name="type"]:checked',parent).val();
+        $('button[type="submit"]', parent).attr("disabled", true);
+        $('button[type="submit"] i', parent).removeClass('d-none')
 
-        console.log(amountRuble)
-        getAjaxData('/payments',{input:{amount:amountRuble, url:originUrl }}, function(response){
+        getAjaxData('/payments',{input:{amount:amountRuble, type:type, url:originUrl }}, function(response){
+            $('button[type="submit"]', parent).attr("disabled", false);
+            $('button[type="submit"] i', parent).addClass('d-none')
+
             if( response.status == 'success' ){
-                window.location.replace(response.redirectUrl)
+                if( type == 'card' ){
+                    $('.alert-success', parent).show()
+                    window.location.replace(response.redirectUrl)
+                }else{
+                    $('.alert-danger', parent).hide()
+                    $('.alert-success', parent).show()
+                    setTimeout(function(){
+                        reloadDashboard()
+                    },1000)                    
+                }
             }else(
-                alert(response.textErr)
+
+                $('.alert-danger', parent).text(response.textErr).show()
             )
         },'POST','createPayment')
     })
@@ -157,7 +172,7 @@ $(document).ready(function() {
         e.preventDefault();
 
         var parent = $(this).parents('#withdraw')
-        var amountRuble = $('[name="amount"]', parent).val();
+        var amountRuble = Number($('[name="amount"]', parent).val()).toFixed();
         $('button[type="submit"]', parent).attr("disabled", true);
         $('button[type="submit"] i', parent).removeClass('d-none')
 
@@ -168,6 +183,9 @@ $(document).ready(function() {
             if( response.status == 'success' ){
                 $('.alert-danger', parent).hide()
                 $('.alert-success', parent).show()
+                setTimeout(function(){
+                    reloadDashboard()
+                },1000)                      
             }else(
                 $('.alert-danger', parent).text(response.textErr).show()
             )
@@ -395,6 +413,19 @@ $(document).ready(function() {
                     alert(response.textErr)
                 }
             },'PUT','Update friendsCount user')
+    })    
+
+    $('body').on('change','[data-paymentStatus]', function(e){
+        var status = $(':selected',this).val()
+        var isUpdate = confirm("Вы точно изменить статус платежа?");
+        var paymentId = $(this).attr('data-paymentStatus');
+
+        if( isUpdate )
+            getAjaxData('/payments/changestatus/',{input:{id:paymentId, status:status}}, function(response){
+                if(response.status == 'failed'){
+                    alert(response.textErr)
+                }
+            },'POST','Update changestatus payment')
     })    
 
     // delete user

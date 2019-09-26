@@ -8,7 +8,7 @@
 		{{else}}
 			-- Отправлено на {{:accountTo}}<br>
 		{{/if}}	
-		{{:amount}} WFS<br>	
+		{{:~convertBalance(amount)}} WFS<br>	
 		{{:~formatDate(updatedAt)}} <br>	
 	</td>
 	{{else}}
@@ -19,7 +19,7 @@
 			-- Отправлено на {{:accountTo}}
 		{{/if}}
 	</td>
-	<td>{{:amount}} WFS</td>
+	<td>{{:~convertBalance(amount)}} WFS</td>
 	<td>{{:~formatDate(updatedAt)}}</td>
 	{{/if}}
 	<td>

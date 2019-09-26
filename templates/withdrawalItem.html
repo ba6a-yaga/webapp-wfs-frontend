@@ -14,7 +14,7 @@
 		<td>{{:userPhone}}</td>
 		{{/if}}
 		<td>{{:~convertBalance(amountRubble) }} руб</td>
-		<td>{{:card }}</td>
+		<td>{{if ~getUser().role == 'user' }}  {{:~hideCard(card)}} {{else}} {{:card}}{{/if}}</td>
 		<td>{{:~formatDate(updatedAt)}}</td>
 		{{/if}}
 		<td>

@@ -1,4 +1,14 @@
 <div id="replenishBalance" class="d-none">
+    <div class="alert alert-success alert-dismissible d-none" role="alert">Запрос в обработке</div>
+    <div class="alert alert-danger alert-dismissible d-none" role="alert"></div>
+    <label class="fancy-radio">
+            <input name="type" value="card" type="radio" checked="checked">
+            <span><i></i>На карту</span>
+    </label>
+    <label class="fancy-radio">
+            <input name="type" value="cash" type="radio">
+            <span><i></i>Наличными</span>
+    </label>    
     <div class="input-group">
             <input class="form-control" type="text" name="amount">
             <span class="input-group-btn"><button class="btn btn-success" type="button" type="submit" >Пополнить</button></span>
