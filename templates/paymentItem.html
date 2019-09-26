@@ -25,7 +25,9 @@
                 <span class="label label-success">Выполнено</span>
             {{else status == 'process' }}
                 <span class="label label-primary">В процессе</span><br>
+                {{if type == 'card'}}
                 <a href="{{:payment.confirmation.confirmation_url}}" target="_blank">Оплатить</a>
+                {{/if}}
 
             {{else status == 'reject'}}
                 <span class="label label-danger">Отклонено</span>
