@@ -24,7 +24,9 @@
             {{if status == 'complite'}}
                 <span class="label label-success">Выполнено</span>
             {{else status == 'process' }}
-                <span class="label label-primary">В процессе</span>
+                <span class="label label-primary">В процессе</span><br>
+                <a href="{{:payment.confirmation.confirmation_url}}" target="_blank">Оплатить</a>
+
             {{else status == 'reject'}}
                 <span class="label label-danger">Отклонено</span>
             {{/if}}
