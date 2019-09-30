@@ -44,7 +44,7 @@ function getLinkParam(param){
 
 function sumArray(array){
     if(array.length)
-        return array.reduce(function(accumulator, currentValue){return accumulator + currentValue})
+        return array.reduce(function(accumulator, currentValue){return Number(accumulator) + Number(currentValue) })
     else
         return 0;
 }
@@ -83,6 +83,11 @@ function getFormData(form){
     var data = {};
 
     form.serializeArray().forEach(function(item){
+
+        if(item.name == 'phone' )
+            item.value = item.value.replace(/[^-0-9]/gim,'');
+        
+
         data[item.name] = item.value;
     })
     return data;

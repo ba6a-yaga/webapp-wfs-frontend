@@ -17,6 +17,9 @@ var tmpl = {};
 
 
 $(document).ready(function() {
+    $('[data-mask="phone"]').mask('(000) 000 00 00');
+    $('[data-mask="card"]').mask('0000-0000-0000-0000');
+
     init_logs( true );
 
     $.ajax({
