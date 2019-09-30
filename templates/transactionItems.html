@@ -6,7 +6,11 @@
 		{{if ~isMe( accountTo )}}
 			++ Поступление от {{:accountFrom}}<br>
 		{{else}}
+			{{if ~getUser().role == 'masterContract'}}
+				-- Отправлено c {{:accountFrom}} на {{:accountTo}}<br>
+			{{else}}
 			-- Отправлено на {{:accountTo}}<br>
+			{{/if}}
 		{{/if}}	
 		{{:~convertBalance(amount)}} WFS<br>	
 		{{:~formatDate(updatedAt)}} <br>	
@@ -16,7 +20,11 @@
 		{{if ~isMe( accountTo )}}
 			++ Поступление от {{:accountFrom}}
 		{{else}}
-			-- Отправлено на {{:accountTo}}
+			{{if ~getUser().role == 'masterContract'}}
+			-- Отправлено c {{:accountFrom}} на {{:accountTo}}<br>
+			{{else}}
+			-- Отправлено на {{:accountTo}}<br>
+			{{/if}}
 		{{/if}}
 	</td>
 	<td>{{:~convertBalance(amount)}} WFS</td>
