@@ -37,7 +37,7 @@
                                 <li>Телефон <span>+7{{:~getUser().phone}}</span></li>
                                 {{if ~getUser().role == 'user'}}
                                 <li>Реферальный процент <span>{{:~round(~getUser().refPercent*100)}}%</span> </li>
-                                <li>Доход с партнерки <span>{{:~sumArray(~getUser().userRelations.sumAllFriends)}} Руб</span> </li>
+                                <li>Доход с партнерки <span>{{:~sumRefPayments(~getUser().refpayments)}} Руб</span> </li>
                                 {{/if}}
                                 <li><a href="#" data-action="getprivatekey">Получить приватный ключ</a></li>
                             </ul>

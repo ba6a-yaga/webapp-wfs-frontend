@@ -57,7 +57,16 @@ function home(){
 function hideCard(card){
     return card.replace(/\d(?=\d{4})/g, "*");
 }
-$.views.helpers({hideCard: hideCard, home: home, sumArray: sumArray, getLinkParam: getLinkParam, activeTabs: activeTabs, isMobile: isMobile, getUser:getUser,formatDate:formatDate, convertBalance:convertBalance, isMe: isMe, getDiscount: getDiscount, round: Math.round });
+
+function sumRefPayments(array){
+    var sum = 0;
+    for(i in array){
+        sum = sum+Number(array[i].amount)
+    }
+
+    return sum.toFixed(2);
+}
+$.views.helpers({sumRefPayments:sumRefPayments, hideCard: hideCard, home: home, sumArray: sumArray, getLinkParam: getLinkParam, activeTabs: activeTabs, isMobile: isMobile, getUser:getUser,formatDate:formatDate, convertBalance:convertBalance, isMe: isMe, getDiscount: getDiscount, round: Math.round });
 
 function reloadDashboard(){
     getAjaxData('/users/current',{},function(response){
