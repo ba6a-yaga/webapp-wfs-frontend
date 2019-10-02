@@ -3,9 +3,9 @@ const app = express()
 const path = require('path');
 const templatePath = path.join(__dirname, 'templates');
 const fs = require('fs');
-app.use('/assets', express.static(__dirname + '/assets'));
+app.use('/dashboard/assets', express.static(__dirname + '/assets'));
 //Load all templates for JSRender
-app.get('/templates', async (req, res) => {
+app.get('/dashboard/templates', async (req, res) => {
     
     return fs.readdir(templatePath, (err, files) => {
         var templates = {};
@@ -20,7 +20,7 @@ app.get('/templates', async (req, res) => {
 
 });
 
-app.get('/', (req, res) => {
+app.get('/dashboard/', (req, res) => {
     res.sendFile(__dirname+'/index.html')
 })
 
