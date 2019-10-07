@@ -15,14 +15,14 @@
                             <div class="row">
                                 {{if ~getUser().role == 'user'}}
                                 <div class="col-md-6 stat-item">
-                                        {{:~getUser().balance}} <span>WFS</span> 
+                                        {{:~formatNumber(~getUser().balance)}} <span>WFS</span>
                                 </div>
                                 <div class="col-md-5 stat-item">
-                                        {{:~getUser().RURbalance}} <span>Руб</span>
+                                        {{:~formatNumber(~getUser().RURbalance)}} <span>Руб</span>
                                 </div>
                                 {{else}}
                                 <div class="col-md-12 stat-item">
-                                        {{:~getUser().balance}} WFS 
+                                        {{:~formatNumber(~getUser().balance)}} WFS
                                 </div>
                                 {{/if}}
                             </div>
@@ -37,7 +37,7 @@
                                 <li>Телефон <span>+7{{:~getUser().phone}}</span></li>
                                 {{if ~getUser().role == 'user'}}
                                 <li>Реферальный процент <span>{{:~round(~getUser().refPercent*100)}}%</span> </li>
-                                <li>Доход с партнерки <span>{{:~sumRefPayments(~getUser().refpayments)}} Руб</span> </li>
+                                <li>Доход с партнерки <span>{{:~formatNumber(~sumRefPayments(~getUser().refpayments))}} Руб</span> </li>
                                 {{/if}}
                                 <li><a href="#" data-action="getprivatekey">Получить приватный ключ</a></li>
                             </ul>
