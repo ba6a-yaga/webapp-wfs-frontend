@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/darkrain/WFS_front#readme",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "glob": "^7.1.4"
   }
 }
